@@ -33,47 +33,61 @@ function getCategoryData() {
     }, type: 'post', async: false, data: { 'type': 3, }
   });
   // $("#test").text(ajaxjson);
-  category_data=JSON.parse(ajaxjson);
-  for(var i=0;i<category_data.length;i++){
-    category_data[i]["class"]=category_data[i]["class"].split('，');
+  category_data = JSON.parse(ajaxjson);
+  for (var i = 0; i < category_data.length; i++) {
+    category_data[i]["class"] = category_data[i]["class"].split('，');
   };
   // $("#test").text(JSON.stringify(category_data));
   // personal_data=obj[0];
   // category_data
 }
-//一切从这里开始
+//一切从这里开始******
 $(document).ready(function () {
-  getCategoryData();
-  show_time();
-  getId(window.location.href);
-  $('#title_name_search').click(function () {
-    getIdBySearch();
-  });
-});
-//获取id
-function getId(str) {
-  var id;
-  // 在url中解析出id，成功则返回id
+  var str = window.location.href
   var n = str.indexOf("id=");
   if (n != -1) {
+    //有id输入
     id = parseInt(str.substring(n + 3));
     if (isNaN(id)) {
-      getIdBySearch();
+      //id格式有误，加载无id页面并弹出警告
+      loadByNoId();
+      alert("ID格式有误");
     }
     else {
-
-      drawHtml(id);
+      //成功获取id
+      loadById(id);
     }
   }
   else {
-    getIdBySearch();
+    //没有id输入
+    loadByNoId();
   }
+  // getCategoryData();
+  // show_time();
+  // getId(window.location.href);
+  // $('#title_name_search').click(function () {
+  //   getIdBySearch();
+  // });
+});
+//在有id的情况下加载页面****
+function loadById(id) {
+
 }
-// 通过搜索框获取id，当在url中获取失败是调用
-function getIdBySearch() {
-  $("#title_name").css("cssText", 'display:none !important')
-  $("#title_info").css("cssText", 'display:none !important')
+//在没有id的情况下加载页面***
+function loadByNoId() {
+  searchDiv();
+  // drawCureProcess();
+  // drawTotalHealthIndex();
+  // drawParts();
+  // drawDiseaseTendency();
+}
+//显示搜索框***
+function searchDiv() {
+  //该隐藏的都隐藏
+  $("#title_name").css("cssText", 'display:none !important');
+  $("#title_info").css("cssText", 'display:none !important');
   $('#search_div').show();
+  //输入回车或点击搜索按钮后
   $("input#search_input").keydown(function (e) {
     if (e.which == 13) {
       $("#search_button").trigger("click");
@@ -81,40 +95,51 @@ function getIdBySearch() {
     }
   });
   $("#search_button").click(function () {
-    var ajaxjson;
-    $.ajax({
-      url: "php/query.php", success: function (result) {
-        ajaxjson = result;
-      }, type: 'post', async: false, data: { 'type': 1, 'info': $("#search_input").val() }
-    });
-    var str_append = '';
-    if (ajaxjson == "[]") {
-      str_append = '<li class="list-group-item" style="line-height:10px;">未找到相关信息</li>';
+    var str = $("#search_input").val();
+    var id = parseInt(str);
+    if (id != -1) {
+      //搜索的是id
+      //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
+      get_person_brief_info_by_id_from_csv();
     }
     else {
-      obj = JSON.parse(ajaxjson);
-      for (var i = 0; i < obj.length; i++) {
-        str_append += '<li class="list-group-item" style="line-height:10px;" value="' + obj[i]["id"] + '">' + obj[i]['姓名'] + ' ' + obj[i]['性别'] + ' ' + obj[i]['生日'] + ' ' + obj[i]['现居地'] + '</li>';
-      }
-      // console.log(obj);
-      // $('#test').text(str_append);
-      // [{"姓名":"穆福伦","性别":"男","生日":"2005-07-29","现居地":"吉林省辽源市"}]
+      //搜索的是名字
+      //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
+      get_person_brief_info_by_name();
     }
-    $('#search_ul').empty();
-    $("#search_ul").append(str_append);
-    $("#search_list").show();
-    $("#search_ul>li").click(function () {
-      // 隐藏搜索框
-      // $("#search_div").css('display', 'none !important');
-      $("#search_div").css("cssText", 'display:none !important');
-      $("#search_list").hide();
-      // 显示姓名标题
-      $("#title_name").show();
-      drawHtml($(this).attr("value"));
-      // $("#test").text($(this).attr("value"));
-    });
+    // var ajaxjson;
+    // $.ajax({
+    //   url: "php/query.php", success: function (result) {
+    //     ajaxjson = result;
+    //   }, type: 'post', async: false, data: { 'type': 1, 'info': $("#search_input").val() }
+    // });
+    // var str_append = '';
+    // if (ajaxjson == "[]") {
+    //   str_append = '<li class="list-group-item" style="line-height:10px;">未找到相关信息</li>';
+    // }
+    // else {
+    //   obj = JSON.parse(ajaxjson);
+    //   for (var i = 0; i < obj.length; i++) {
+    //     str_append += '<li class="list-group-item" style="line-height:10px;" value="' + obj[i]["id"] + '">' + obj[i]['姓名'] + ' ' + obj[i]['性别'] + ' ' + obj[i]['生日'] + ' ' + obj[i]['现居地'] + '</li>';
+    //   }
+    //   // console.log(obj);
+    //   // $('#test').text(str_append);
+    //   // [{"姓名":"穆福伦","性别":"男","生日":"2005-07-29","现居地":"吉林省辽源市"}]
+    // }
+    // $('#search_ul').empty();
+    // $("#search_ul").append(str_append);
+    // $("#search_list").show();
+    // $("#search_ul>li").click(function () {
+    //   // 隐藏搜索框
+    //   // $("#search_div").css('display', 'none !important');
+    //   $("#search_div").css("cssText", 'display:none !important');
+    //   $("#search_list").hide();
+    //   // 显示姓名标题
+    //   $("#title_name").show();
+    //   drawHtml($(this).attr("value"));
+    //   // $("#test").text($(this).attr("value"));
+    // });
   });
-
 }
 // 获取个人数据
 function getPersonalData(id) {
@@ -125,12 +150,12 @@ function getPersonalData(id) {
     }, type: 'post', async: false, data: { 'type': 2, 'id': id }
   });
   // $("#test").text(ajaxjson);
-  var obj=JSON.parse(ajaxjson);
-  personal_data=obj[0];
+  var obj = JSON.parse(ajaxjson);
+  personal_data = obj[0];
 
 }
-// 画流程图
-function draw_process(id, process_data) {
+// 画就诊流程图***
+function drawCureProcess(id, process_data) {
   process_data = process_data.split(',');
   var col_width = $('#' + id).width() / 12;
   var con_height = $('#' + id).height();
@@ -165,9 +190,9 @@ function draw_process(id, process_data) {
       res += '<div class="row" style="margin-top: ' + a + 'px;">' +
         '<div class="col align-items-center d-flex justify-content-end">' +
         '<div class="card">' +
-        '<div class="card-header bg-primary text-white px-2 py-0 font-small9">' + process_data[j-2] + '</div>' +
+        '<div class="card-header bg-primary text-white px-2 py-0 font-small9">' + process_data[j - 2] + '</div>' +
         '<div class="card-body px-1 py-0">' +
-        '<p class="card-text font-small9 text-dark" style="font-weight:bold;font-family:SimSun;">' + process_data[j-1] + '</p>' +
+        '<p class="card-text font-small9 text-dark" style="font-weight:bold;font-family:SimSun;">' + process_data[j - 1] + '</p>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -180,7 +205,7 @@ function draw_process(id, process_data) {
         '<div class="col-1 no-padding d-flex justify-content-center align-items-center"></div>' +
         '<div class="col"></div>' +
         '</div >';
-        j-=2;
+      j -= 2;
     }
     else {
       res += '<div class="row" style="margin-top: ' + a + 'px;">' +
@@ -194,20 +219,20 @@ function draw_process(id, process_data) {
         '</div>' +
         '<div class="col  align-items-center d-flex justify-content-start">' +
         '<div class="card">' +
-        '<div class="card-header bg-primary text-white px-1 py-0 font-small9">' + process_data[j-2] + '</div>' +
+        '<div class="card-header bg-primary text-white px-1 py-0 font-small9">' + process_data[j - 2] + '</div>' +
         '<div class="card-body px-1 py-0">' +
-        '<p class="card-text font-small9 text-dark" style="font-weight:bold;font-family:SimSun;">' + process_data[j-1] + '</p>' +
+        '<p class="card-text font-small9 text-dark" style="font-weight:bold;font-family:SimSun;">' + process_data[j - 1] + '</p>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '</div >';
-        j-=2;
+      j -= 2;
     }
   }
   $('#' + id).html(res);
 }
-//计算总体健康指数
-function getTotalHealthIndex() {
+//计算总体健康指数并显示***
+function drawTotalHealthIndex() {
   return personal_data["总体评分"];
 }
 // 类别鼠标移上去事件
@@ -226,7 +251,7 @@ function categoryMouseEnter(n, categories_illness) {
       $('#category' + i + '_score').css('cssText', 'border-color:#FFC107 !important;background-color:#FFC107 !important;');
       var temp = items[categories_illness[n - 1]];
       $('#items_tbody').empty();
-      for (var j = 0; j < temp.length && j<14; j++) {
+      for (var j = 0; j < temp.length && j < 14; j++) {
         $("#items_tbody").append(
           '<tr>' +
           '<th scope="row"><span class="iconfont icon-zhibiao fs9"></span></th>' +
@@ -240,8 +265,8 @@ function categoryMouseEnter(n, categories_illness) {
   }
 
 }
-// 绘制大类得分及相关指标
-function draw_categories() {
+// 绘制大类得分及相关指标****
+function drawParts() {
   var categories = ['血压', '心脏', '大脑', '代谢', '胃', '肺',];
   var categories_illness = ['血压', '心脏', '大脑', '代谢', '胃', '肺',];
   // 填写大类数据
@@ -303,8 +328,8 @@ function getIllnessData() {
     '冠心病': { 'numbers': [40, 39, 38, 42, 52, 59, 65, 75, 74, 72, 73], 'items': '高血压是冠心病的主要危险因素，收缩压和舒张压均与冠心病发病率显著相关，而且随着血压升高，冠心病的发病率和死亡率均呈上升趋势。', 'suggestion': '心情放松对心脏功能的保护有很大的好处，建议患者平时可通过瑜伽、闭目养神等途径来达到身心健康的目的。而在生活中，遇事要沉着冷静，做到面对和处理事物时能保持坦然的心态。' },
   };
 }
-// 绘制折线图
-function drawLineChart(conId, title, age) {
+// 绘制疾病发展趋势图
+function drawDiseaseTendency(conId, title, age) {
   var ages = new Array();
   for (var i = 0; i <= 10; i++) {
     ages.push((age + i) + '岁');
@@ -478,3 +503,36 @@ function drawHtml(id) {
 "身高":"130","体重":"74","脑卒中家族史":"0","脑卒中早发家族史":"1","无症状颈动脉狭窄":"0","慢性房颤":"0","其他心脏病":"0"
 }
 */
+function get_person_brief_info_by_id_from_csv(id) {
+  // alert("csv");
+  var my_csv = new File("data\\", "person.csv");
+  var reader = new FileReader();
+  reader.readAsText(my_csv);
+  alert(reader.result)
+  //   reader.onload = function () {
+  //     var data = csvToObject(this.result);
+  //     console.log(data);//data为csv转换后的对象
+  //   }
+  // function csvToObject(csvString) {
+  //   var csvarry = csvString.split("\r\n");
+  //   var datas = [];
+  //   var headers = csvarry[0].split(",");
+  //   for (var i = 1; i < csvarry.length; i++) {
+  //     var data = {};
+  //     var temp = csvarry[i].split(",");
+  //     for (var j = 0; j < temp.length; j++) {
+  //       data[headers[j]] = temp[j];
+  //     }
+  //     datas.push(data);
+  //   }
+  //   return datas;
+  // }
+
+
+    
+  
+
+}
+function get_person_brief_info_by_name_from_csv(name) {
+
+}
