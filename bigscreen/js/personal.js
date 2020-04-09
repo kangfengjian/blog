@@ -41,7 +41,7 @@ function getCategoryData() {
   // personal_data=obj[0];
   // category_data
 }
-//一切从这里开始******
+//一切从这里开始************************************************************************************************
 $(document).ready(function () {
   var str = window.location.href
   var n = str.indexOf("id=");
@@ -76,9 +76,9 @@ function loadById(id) {
 //在没有id的情况下加载页面***
 function loadByNoId() {
   searchDiv();
-  // drawCureProcess();
-  // drawTotalHealthIndex();
-  // drawParts();
+  drawCureProcess('就诊日期,就诊记录,就诊日期,就诊记录');
+  drawTotalHealthIndex(100);
+  drawParts();
   // drawDiseaseTendency();
 }
 //显示搜索框***
@@ -97,15 +97,16 @@ function searchDiv() {
   $("#search_button").click(function () {
     var str = $("#search_input").val();
     var id = parseInt(str);
-    if (id != -1) {
+    var ajaxjson;
+    if (!isNaN(id)) {
       //搜索的是id
       //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
-      get_person_brief_info_by_id_from_csv();
+      ajaxjson = get_person_brief_info_by_id_from_csv(id);
     }
     else {
       //搜索的是名字
       //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
-      get_person_brief_info_by_name();
+      ajaxjson = get_person_brief_info_by_name_from_csv(str);
     }
     // var ajaxjson;
     // $.ajax({
@@ -113,32 +114,21 @@ function searchDiv() {
     //     ajaxjson = result;
     //   }, type: 'post', async: false, data: { 'type': 1, 'info': $("#search_input").val() }
     // });
-    // var str_append = '';
-    // if (ajaxjson == "[]") {
-    //   str_append = '<li class="list-group-item" style="line-height:10px;">未找到相关信息</li>';
-    // }
-    // else {
-    //   obj = JSON.parse(ajaxjson);
-    //   for (var i = 0; i < obj.length; i++) {
-    //     str_append += '<li class="list-group-item" style="line-height:10px;" value="' + obj[i]["id"] + '">' + obj[i]['姓名'] + ' ' + obj[i]['性别'] + ' ' + obj[i]['生日'] + ' ' + obj[i]['现居地'] + '</li>';
-    //   }
-    //   // console.log(obj);
-    //   // $('#test').text(str_append);
-    //   // [{"姓名":"穆福伦","性别":"男","生日":"2005-07-29","现居地":"吉林省辽源市"}]
-    // }
-    // $('#search_ul').empty();
-    // $("#search_ul").append(str_append);
-    // $("#search_list").show();
-    // $("#search_ul>li").click(function () {
-    //   // 隐藏搜索框
-    //   // $("#search_div").css('display', 'none !important');
-    //   $("#search_div").css("cssText", 'display:none !important');
-    //   $("#search_list").hide();
-    //   // 显示姓名标题
-    //   $("#title_name").show();
-    //   drawHtml($(this).attr("value"));
-    //   // $("#test").text($(this).attr("value"));
-    // });
+    var str_append = '';
+    if (ajaxjson.length == 0) {
+      str_append = '<li class="list-group-item" style="line-height:10px;">未找到相关信息</li>';
+    }
+    else {
+      for (var i = 0; i < ajaxjson.length; i++) {
+        str_append += '<li class="list-group-item" style="line-height:10px;"><a href="personal_bigscreen.html?id='+ajaxjson[i][0]+'">'  + ajaxjson[i][1] + '</a></li>';
+      }
+      // console.log(obj);
+      // $('#test').text(str_append);
+      // [{"姓名":"穆福伦","性别":"男","生日":"2005-07-29","现居地":"吉林省辽源市"}]
+    }
+    $('#search_ul').empty();
+    $("#search_ul").append(str_append);
+    $("#search_list").show();
   });
 }
 // 获取个人数据
@@ -155,16 +145,16 @@ function getPersonalData(id) {
 
 }
 // 画就诊流程图***
-function drawCureProcess(id, process_data) {
+function drawCureProcess(process_data) {
   process_data = process_data.split(',');
-  var col_width = $('#' + id).width() / 12;
-  var con_height = $('#' + id).height();
+  var col_width = $('#process_con').width() / 12;
+  var con_height = $('#process_con').height();
   var ribbon_size = col_width * 2.7;
   var row_margin = -1.8 * col_width;
   var arrow_size = col_width / 3;
   var row_height = ribbon_size / 2 * 3;
   if (con_height < row_height) {
-    $('#' + id).text("容器高度不足以展示图表");
+    $('#process_con').text("容器高度不足以展示图表");
     return;
   }
 
@@ -229,11 +219,12 @@ function drawCureProcess(id, process_data) {
       j -= 2;
     }
   }
-  $('#' + id).html(res);
+  $('#process_con').html(res);
 }
 //计算总体健康指数并显示***
-function drawTotalHealthIndex() {
-  return personal_data["总体评分"];
+function drawTotalHealthIndex(health_index) {
+  $("#total_health_con").show();
+  $('#total_health_index').text(health_index);
 }
 // 类别鼠标移上去事件
 function categoryMouseEnter(n, categories_illness) {
@@ -503,36 +494,23 @@ function drawHtml(id) {
 "身高":"130","体重":"74","脑卒中家族史":"0","脑卒中早发家族史":"1","无症状颈动脉狭窄":"0","慢性房颤":"0","其他心脏病":"0"
 }
 */
+
 function get_person_brief_info_by_id_from_csv(id) {
-  // alert("csv");
-  var my_csv = new File("data\\", "person.csv");
-  var reader = new FileReader();
-  reader.readAsText(my_csv);
-  alert(reader.result)
-  //   reader.onload = function () {
-  //     var data = csvToObject(this.result);
-  //     console.log(data);//data为csv转换后的对象
-  //   }
-  // function csvToObject(csvString) {
-  //   var csvarry = csvString.split("\r\n");
-  //   var datas = [];
-  //   var headers = csvarry[0].split(",");
-  //   for (var i = 1; i < csvarry.length; i++) {
-  //     var data = {};
-  //     var temp = csvarry[i].split(",");
-  //     for (var j = 0; j < temp.length; j++) {
-  //       data[headers[j]] = temp[j];
-  //     }
-  //     datas.push(data);
-  //   }
-  //   return datas;
-  // }
-
-
-    
-  
-
+  // alert(data_person[0]['姓名']);姓名、性别、生日、现居地
+  // 根据id查找人并返回信息，如果查找不到则返回空集。返回结果是一个数组，数组里含有多条查找到得信息，每条数据是一个id加一个字符串
+  if (id in data_person) {
+    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地']]];
+  }
+  else {
+    return [];
+  }
 }
 function get_person_brief_info_by_name_from_csv(name) {
-
+  var ar = [];
+  for (key in data_person) {
+    if (data_person[key]['姓名'] == name) {
+      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地']]);
+    }
+  }
+  return ar;
 }
