@@ -48,7 +48,7 @@
                 <div class="row h-50 px-2 d-flex justify-content-center align-items-center" id="search_div"
                   style="display:none !important;">
                   <div class="input-group mb-0">
-                    <input type="text" class="form-control" placeholder="输入编号（0-99）或姓名搜索"
+                    <input type="text" class="form-control" placeholder="输入编号（0-499）或姓名搜索"
                       aria-label="Recipient's username" aria-describedby="basic-addon2" id="search_input">
                     <div class="input-group-append" id="search_button" style="cursor:pointer;">
                       <span class="iconfont icon-htmal5icon25 input-group-text rounded-right"></span>
@@ -198,10 +198,10 @@
               <table class="table table-sm no-margin-h">
                 <thead>
                   <tr>
-                    <th scope="col" class="text-nowrap border-top-0">#</th>
-                    <th scope="col" class="text-nowrap border-top-0">名称</th>
-                    <th scope="col" class="text-nowrap border-top-0">当前指标</th>
-                    <th scope="col" class="text-nowrap border-top-0">理想指标</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white">#</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white">名称</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white">当前指标</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white">理想指标</th>
                   </tr>
                 </thead>
                 <tbody id="items_tbody">
@@ -292,8 +292,9 @@
   <!-- 引入echarts文件///////////////////////////////////////////////////////////////////////////////////////// -->
   <script type="text/javascript" src="js/echarts.min.js"></script>
   <!-- 引入自定义js文件 -->
-  <script src='data/person.js'></script>
-  <script src='data/parts.js'></script>
+  <script src='data/data_person500.js'></script>
+  <script src='data/data_part.js'></script>
+  <script src='data/data_item.js'></script>
   <script>document.write('<script src="js/personal.js?time=' + new Date().getTime() + '"><\/script>');</script>
 </body>
 

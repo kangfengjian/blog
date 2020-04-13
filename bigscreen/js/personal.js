@@ -65,21 +65,27 @@ $(document).ready(function () {
   // getCategoryData();
   // show_time();
   // getId(window.location.href);
-  // $('#title_name_search').click(function () {
-  //   getIdBySearch();
-  // });
+
+  // });id
 });
 //在有id的情况下加载页面****
 function loadById(id) {
+  showTime();
+  drawPersonInfo(id);
+  drawCureProcess(id); id
+  drawTotalHealthIndex(id);
+  drawParts(id);
+  drawDiseaseTendency(id);
 
 }
 //在没有id的情况下加载页面***
 function loadByNoId() {
+  showTime();
   searchDiv();
-  drawCureProcess('就诊日期,就诊记录,就诊日期,就诊记录');
-  drawTotalHealthIndex(100);
-  drawParts();
-  // drawDiseaseTendency();
+  drawCureProcess('no_id');
+  drawTotalHealthIndex('no_id');
+  drawParts('no_id');
+  drawDiseaseTendency('no_id');
 }
 //显示搜索框***
 function searchDiv() {
@@ -101,12 +107,12 @@ function searchDiv() {
     if (!isNaN(id)) {
       //搜索的是id
       //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
-      ajaxjson = get_person_brief_info_by_id_from_csv(id);
+      ajaxjson = get_person_brief_info_by_id_from_js(id);
     }
     else {
       //搜索的是名字
       //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
-      ajaxjson = get_person_brief_info_by_name_from_csv(str);
+      ajaxjson = get_person_brief_info_by_name_from_js(str);
     }
     // var ajaxjson;
     // $.ajax({
@@ -120,7 +126,7 @@ function searchDiv() {
     }
     else {
       for (var i = 0; i < ajaxjson.length; i++) {
-        str_append += '<li class="list-group-item" style="line-height:10px;"><a href="personal_bigscreen.html?id='+ajaxjson[i][0]+'">'  + ajaxjson[i][1] + '</a></li>';
+        str_append += '<li class="list-group-item" style="line-height:10px;"><a href="personal_bigscreen.html?id=' + ajaxjson[i][0] + '">' + ajaxjson[i][1] + '</a></li>';
       }
       // console.log(obj);
       // $('#test').text(str_append);
@@ -145,8 +151,8 @@ function getPersonalData(id) {
 
 }
 // 画就诊流程图***
-function drawCureProcess(process_data) {
-  process_data = process_data.split(',');
+function drawCureProcess(id) {
+  process_data = data_person[id]['就诊记录'].split(',');
   var col_width = $('#process_con').width() / 12;
   var con_height = $('#process_con').height();
   var ribbon_size = col_width * 2.7;
@@ -221,13 +227,13 @@ function drawCureProcess(process_data) {
   }
   $('#process_con').html(res);
 }
-//计算总体健康指数并显示***
-function drawTotalHealthIndex(health_index) {
+//总体健康指数显示***
+function drawTotalHealthIndex(id) {
   $("#total_health_con").show();
-  $('#total_health_index').text(health_index);
+  $('#total_health_index').text(data_person[id]['总体得分']);
 }
 // 类别鼠标移上去事件
-function categoryMouseEnter(n, categories_illness) {
+function categoryMouseEnter(n, part, id) {
   for (var i = 1; i <= 6; i++) {
     if (i != n) {
       $('#category' + i + '_icon').css('cssText', 'border-color:white !important');
@@ -240,15 +246,15 @@ function categoryMouseEnter(n, categories_illness) {
       $('#category' + i + '_icon>span').css('cssText', 'color:#FFC107 !important');
       $('#category' + i + '_text').css('cssText', 'border-color:#FFC107 !important');
       $('#category' + i + '_score').css('cssText', 'border-color:#FFC107 !important;background-color:#FFC107 !important;');
-      var temp = items[categories_illness[n - 1]];
       $('#items_tbody').empty();
-      for (var j = 0; j < temp.length && j < 14; j++) {
+      for (var j in data_part[part]['items']) {
+        item = data_part[part]['items'][j];
         $("#items_tbody").append(
           '<tr>' +
-          '<th scope="row"><span class="iconfont icon-zhibiao fs9"></span></th>' +
-          '<td class="fs9">' + temp[j].name + '</td>' +
-          '<td class="fs9 text-nowrap">' + temp[j].index + '</td>' +
-          '<td class="fs9 text-nowrap">' + temp[j].min + ' ~ ' + temp[j].max + '</td>' +
+          '<th scope="row"><span class="iconfont icon-zhibiao fs9 text-white"></span></th>' +
+          '<td class="fs9 text-white">' + item + '</td>' +
+          '<td class="fs9 text-nowrap text-white">' + data_person[id][item] + '</td>' +
+          '<td class="fs9 text-nowrap text-white">' + data_item[item]['min'] + ' ~ ' + data_item[item]['max'] + data_item[item]['unit'] + '</td>' +
           '</tr>'
         )
       }
@@ -257,70 +263,92 @@ function categoryMouseEnter(n, categories_illness) {
 
 }
 // 绘制大类得分及相关指标****
-function drawParts() {
+function drawParts(id) {
   var categories = ['血压', '心脏', '大脑', '代谢', '胃', '肺',];
   var categories_illness = ['血压', '心脏', '大脑', '代谢', '胃', '肺',];
   // 填写大类数据
   $('#categories_div').show();
   $('#category1_icon').html('<span style="color:#28A745;"class=" iconfont icon-zhongliuxinnaoxieguanjibing font-big1_5"></span>');
-  $('#category1_text').text(categories[0]);
-  $('#category1_score').text(personal_data["血压评分"]);
+  $('#category1_text').text('血压');
+  $('#category1_score').text(data_person[id]["血压得分"]);
 
   $('#category2_icon').html('<span class="text-success iconfont icon-xinzang font-big1_5"></span>');
-  $('#category2_text').text(categories[1]);
-  $('#category2_score').text(personal_data["心脏评分"]);
+  $('#category2_text').text('心脏');
+  $('#category2_score').text(data_person[id]["心脏得分"]);
 
   $('#category3_icon').html('<span class="text-success iconfont icon-danao- font-big1_5"></span>');
-  $('#category3_text').text(categories[2]);
-  $('#category3_score').text(personal_data["大脑评分"]);
+  $('#category3_text').text('大脑');
+  $('#category3_score').text(data_person[id]["大脑得分"]);
 
   $('#category4_icon').html('<span class="text-success iconfont icon-tubiaozhizuomoban font-big1_5"></span>');
-  $('#category4_text').text(categories[3]);
-  $('#category4_score').text(personal_data["代谢评分"]);
+  $('#category4_text').text('代谢');
+  $('#category4_score').text(data_person[id]["代谢得分"]);
 
   $('#category5_icon').html('<span class="text-success iconfont icon-shenzang font-big1_5"></span>');
-  $('#category5_text').text(categories[4]);
-  $('#category5_score').text(personal_data["胃评分"]);
+  $('#category5_text').text('胃');
+  $('#category5_score').text(data_person[id]["胃得分"]);
 
   $('#category6_icon').html('<span class="text-success iconfont icon-xieya font-big1_5"></span>');
-  $('#category6_text').text(categories[5]);
-  $('#category6_score').text(personal_data["肺评分"]);
+  $('#category6_text').text('肺');
+  $('#category6_score').text(data_person[id]["肺得分"]);
   // 生成指标列表
-  for (var i = 0; i < categories_illness.length; i++) {
-    items[categories_illness[i]] = [];
-  }
-  for (var i = 0; i < category_data.length; i++) {
-    var item_object = {};
-    item_object.name = category_data[i].name;
-    item_object.index = personal_data[item_object.name];
-    item_object.min = 0;
-    item_object.max = 0;
-    for (var j = 0; j < category_data[i].class.length; j++) {
-      if (categories_illness.indexOf(category_data[i].class[j]) > -1) {
-        items[category_data[i].class[j]].push(item_object);
-      }
-    }
-  }
+  // for (var i = 0; i < categories_illness.length; i++) {
+  //   items[categories_illness[i]] = [];
+  // }
+  // for (var i = 0; i < category_data.length; i++) {
+  //   var item_object = {};
+  //   item_object.name = category_data[i].name;
+  //   item_object.index = personal_data[item_object.name];
+  //   item_object.min = 0;
+  //   item_object.max = 0;
+  //   for (var j = 0; j < category_data[i].class.length; j++) {
+  //     if (categories_illness.indexOf(category_data[i].class[j]) > -1) {
+  //       items[category_data[i].class[j]].push(item_object);
+  //     }
+  //   }
+  // }
   // 对大类添加监听-改变样式，并显示对应指标
+
   $('#category_items').show();
-  categoryMouseEnter(1, categories_illness);
-  $('#category1').mouseenter(function () { categoryMouseEnter(1, categories_illness); });
-  $('#category2').mouseenter(function () { categoryMouseEnter(2, categories_illness); });
-  $('#category3').mouseenter(function () { categoryMouseEnter(3, categories_illness); });
-  $('#category4').mouseenter(function () { categoryMouseEnter(4, categories_illness); });
-  $('#category5').mouseenter(function () { categoryMouseEnter(5, categories_illness); });
-  $('#category6').mouseenter(function () { categoryMouseEnter(6, categories_illness); });
+  categoryMouseEnter(1, categories_illness[0], id);
+  $('#category1').mouseenter(function () { categoryMouseEnter(1, categories_illness[0], id); });
+  $('#category2').mouseenter(function () { categoryMouseEnter(2, categories_illness[1], id); });
+  $('#category3').mouseenter(function () { categoryMouseEnter(3, categories_illness[2], id); });
+  $('#category4').mouseenter(function () { categoryMouseEnter(4, categories_illness[3], id); });
+  $('#category5').mouseenter(function () { categoryMouseEnter(5, categories_illness[4], id); });
+  $('#category6').mouseenter(function () { categoryMouseEnter(6, categories_illness[5], id); });
 }
 // 获取疾病预测数据
 function getIllnessData() {
   illness_data = {
-    '高血压': { 'numbers': [10, 15, 20, 18, 16, 12, 10, 6, 4, 4, 4], 'items': '高血压的危险因素有很多，分为可控制因素和不可控制因素。可控制因素，比如压力大、吃的太咸、运动太少等，这些都是可以控制的；不可控制因素，比如家庭遗传倾向，父母或者祖父母都有高血压，这些因素是不可能去掉的。', 'suggestion': '建议低盐饮食、低脂肪饮食，不要过多的热量的摄入，另外一方面一定要禁烟禁酒，而且要避免激动情绪，有高血脂的必须要同时治疗，否则降压效果不会太好，同时要在医生指导下选择降压药。' },
-    '脑卒中': { 'numbers': [40, 30, 35, 41, 45, 40, 52, 45, 43, 46, 45], 'items': '引起脑中风的危险因素有：年龄、遗传、高血压、 低血压 、 心脏病 、 心律失常 、眼底动脉硬化、 糖尿病 、 高脂血症 、吸烟、饮酒、 肥胖 ，饮食因素如高盐、多肉、高动物油饮食，饮浓咖啡浓茶、体力活动过量等，均被认为是脑卒中的危险因素。', 'suggestion': '如患者伴有高血压病，相关康复训练应慎重进行，运动训练量多少需随时监测。如患者伴有心脏病，进行训练与评估前评价患者整体情况，进行相关运动处方界定。' },
-    '冠心病': { 'numbers': [40, 39, 38, 42, 52, 59, 65, 75, 74, 72, 73], 'items': '高血压是冠心病的主要危险因素，收缩压和舒张压均与冠心病发病率显著相关，而且随着血压升高，冠心病的发病率和死亡率均呈上升趋势。', 'suggestion': '心情放松对心脏功能的保护有很大的好处，建议患者平时可通过瑜伽、闭目养神等途径来达到身心健康的目的。而在生活中，遇事要沉着冷静，做到面对和处理事物时能保持坦然的心态。' },
+    '高血压': { 'items': '高血压的危险因素有很多，分为可控制因素和不可控制因素。可控制因素，比如压力大、吃的太咸、运动太少等，这些都是可以控制的；不可控制因素，比如家庭遗传倾向，父母或者祖父母都有高血压，这些因素是不可能去掉的。', 'suggestion': '建议低盐饮食、低脂肪饮食，不要过多的热量的摄入，另外一方面一定要禁烟禁酒，而且要避免激动情绪，有高血脂的必须要同时治疗，否则降压效果不会太好，同时要在医生指导下选择降压药。' },
+    '脑卒中': { 'items': '引起脑中风的危险因素有：年龄、遗传、高血压、 低血压 、 心脏病 、 心律失常 、眼底动脉硬化、 糖尿病 、 高脂血症 、吸烟、饮酒、 肥胖 ，饮食因素如高盐、多肉、高动物油饮食，饮浓咖啡浓茶、体力活动过量等，均被认为是脑卒中的危险因素。', 'suggestion': '如患者伴有高血压病，相关康复训练应慎重进行，运动训练量多少需随时监测。如患者伴有心脏病，进行训练与评估前评价患者整体情况，进行相关运动处方界定。' },
+    '冠心病': { 'items': '高血压是冠心病的主要危险因素，收缩压和舒张压均与冠心病发病率显著相关，而且随着血压升高，冠心病的发病率和死亡率均呈上升趋势。', 'suggestion': '心情放松对心脏功能的保护有很大的好处，建议患者平时可通过瑜伽、闭目养神等途径来达到身心健康的目的。而在生活中，遇事要沉着冷静，做到面对和处理事物时能保持坦然的心态。' },
   };
 }
 // 绘制疾病发展趋势图
-function drawDiseaseTendency(conId, title, age) {
+function drawLineChart(conId, title, age, id) {
+  illness_data = {
+    '高血压': {
+      'items':
+        '高血压的危险因素有很多，分为可控制因素和不可控制因素。可控制因素，比如压力大、吃的太咸、运动太少等，这些都是可以控制的；不可控制因素，比如家庭遗传倾向，父母或者祖父母都有高血压，这些因素是不可能去掉的。',
+      'suggestion':
+        '建议低盐饮食、低脂肪饮食，不要过多的热量的摄入，另外一方面一定要禁烟禁酒，而且要避免激动情绪，有高血脂的必须要同时治疗，否则降压效果不会太好，同时要在医生指导下选择降压药。'
+    },
+    '脑卒中': {
+      'items':
+        '引起脑中风的危险因素有：年龄、遗传、高血压、 低血压 、 心脏病 、 心律失常 、眼底动脉硬化、 糖尿病 、 高脂血症 、吸烟、饮酒、 肥胖 ，饮食因素如高盐、多肉、高动物油饮食，饮浓咖啡浓茶、体力活动过量等，均被认为是脑卒中的危险因素。',
+      'suggestion':
+        '如患者伴有高血压病，相关康复训练应慎重进行，运动训练量多少需随时监测。如患者伴有心脏病，进行训练与评估前评价患者整体情况，进行相关运动处方界定。'
+    },
+    '冠心病':
+    {
+      'items':
+        '高血压是冠心病的主要危险因素，收缩压和舒张压均与冠心病发病率显著相关，而且随着血压升高，冠心病的发病率和死亡率均呈上升趋势。',
+      'suggestion':
+        '心情放松对心脏功能的保护有很大的好处，建议患者平时可通过瑜伽、闭目养神等途径来达到身心健康的目的。而在生活中，遇事要沉着冷静，做到面对和处理事物时能保持坦然的心态。'
+    },
+  };
   var ages = new Array();
   for (var i = 0; i <= 10; i++) {
     ages.push((age + i) + '岁');
@@ -382,7 +410,7 @@ function drawDiseaseTendency(conId, title, age) {
       }
     },
     series: [{
-      data: illness_data[title].numbers,
+      data: data_person[id][title + '发展'],
       type: 'line',
       smooth: true,
     }]
@@ -419,22 +447,20 @@ function showIllnessMessage(id, name) {
   });
 }
 // 绘制第三列：风险预测
-function draw_thirdcol() {
-  //先获取数据
-  getIllnessData();
+function drawDiseaseTendency(id) {
   //画折线图
   var myDate = new Date();
-  var age = myDate.getFullYear() - parseInt(personal_data['生日']);
-  drawLineChart('illness1', '冠心病', age);
-  drawLineChart('illness2', '脑卒中', age);
-  drawLineChart('illness3', '高血压', age);
+  var age = myDate.getFullYear() - parseInt(data_person[id]['生日']);
+  drawLineChart('illness1', '冠心病', age, id);
+  drawLineChart('illness2', '脑卒中', age, id);
+  drawLineChart('illness3', '高血压', age, id);
   //添加事件监听
   showIllnessMessage(1, '冠心病');
   showIllnessMessage(2, '脑卒中');
   showIllnessMessage(3, '高血压');
 }
 //时间
-function show_time() {
+function showTime() {
   var myDate = new Date;
   var year = myDate.getFullYear(); //获取当前年
   var mon = myDate.getMonth() + 1; //获取当前月
@@ -451,23 +477,31 @@ function show_time() {
 function show_something() {
   $("#total_health_con").show();
 }
-//绘制整个页面
-function drawHtml(id) {
+//绘制个人信息
+function drawPersonInfo(id) {
   $('#a_personal').attr('href', 'personal_bigscreen.html?id=' + id);
   $('#a_group').attr('href', 'group_bigscreen.html?id=' + id);
+  $('#title_name').show();
+  $('#title_info').show();
+  var myDate = new Date();
+  $('#title_name_h1').text(data_person[id]['姓名']);
+  $('#title_info_sex').text(data_person[id]['性别']);
+  $('#title_info_age').text(myDate.getFullYear() - parseInt(data_person[id]['生日']) + '岁');
+  $('#title_info_nation').text(data_person[id]['民族']);
+  $('#title_info_job').text(data_person[id]['工作']);
+  $('#title_info_address').text(data_person[id]['现居地']);
+  $('#title_name_search').click(function () {
+    searchDiv();
+  });
+}
+function drawHtml(id) {
+
   getPersonalData(id);
   // 首先显示
   show_something();
   // 填写标题数据
-  $('#title_name').show();
-  $('#title_info').show();
-  var myDate = new Date();
-  $('#title_name_h1').text(personal_data['姓名']);
-  $('#title_info_sex').text(personal_data['性别']);
-  $('#title_info_age').text(myDate.getFullYear() - parseInt(personal_data['生日']) + '岁');
-  $('#title_info_nation').text(personal_data['民族']);
-  $('#title_info_job').text(personal_data['工作']);
-  $('#title_info_address').text(personal_data['现居地']);
+
+
   // 绘制就诊流程图
   draw_process('process_con', personal_data['就诊记录']);
   // 填写总体健康指数
@@ -495,7 +529,7 @@ function drawHtml(id) {
 }
 */
 
-function get_person_brief_info_by_id_from_csv(id) {
+function get_person_brief_info_by_id_from_js(id) {
   // alert(data_person[0]['姓名']);姓名、性别、生日、现居地
   // 根据id查找人并返回信息，如果查找不到则返回空集。返回结果是一个数组，数组里含有多条查找到得信息，每条数据是一个id加一个字符串
   if (id in data_person) {
@@ -505,7 +539,7 @@ function get_person_brief_info_by_id_from_csv(id) {
     return [];
   }
 }
-function get_person_brief_info_by_name_from_csv(name) {
+function get_person_brief_info_by_name_from_js(name) {
   var ar = [];
   for (key in data_person) {
     if (data_person[key]['姓名'] == name) {
@@ -513,4 +547,20 @@ function get_person_brief_info_by_name_from_csv(name) {
     }
   }
   return ar;
+}
+function get_part_info(id) {
+  part_info = {};
+  for (var part_key in data_part) {
+    part_info[part_key] = {};
+    part_info[part_key]['score'] = data_person[id][part_key + '得分'];
+    part_info[part_key]['items'] = {}
+    for (var item in data_part[part_key]['items']) {
+      part_info[part_key]['items'][item] = []
+      part_info[part_key]['items'][item].push(data_person[id][item])
+      part_info[part_key]['items'][item].push(data_item[item]['min'])
+      part_info[part_key]['items'][item].push(data_item[item]['max'])
+      part_info[part_key]['items'][item].push(data_item[item]['unit'])
+    }
+  }
+  return part_info
 }
