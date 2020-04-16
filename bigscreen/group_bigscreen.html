@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/iconfont.css">
   <!-- 引入自定义css文件 -->
   <script>document.write('<link rel="stylesheet" href="css/main.css?time=' + new Date().getTime() + '">');</script>
+  <link rel="shortcut icon" href="favicon.png">
   <style>
     html,
     body {
@@ -50,13 +51,13 @@
                 <div class="row h-50 px-2 d-flex justify-content-center align-items-center" id="search_div"
                   style="display:none !important;">
                   <div class="input-group mb-0">
-                    <input type="text" class="form-control" placeholder="搜索" aria-label="Recipient's username"
-                      aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" placeholder="输入编号（0-499）或姓名搜索"
+                      aria-label="Recipient's username" aria-describedby="basic-addon2" id="search_input">
                     <div class="input-group-append" id="search_button" style="cursor:pointer;">
                       <span class="iconfont icon-htmal5icon25 input-group-text rounded-right"></span>
                     </div>
-                    <div class="w-100 border border-white" id="search_list"
-                      style="display:none;position: absolute;left: 0px;top: 50px;z-index: 2000; overflow-y:auto; max-height: 500%;">
+                    <div class=" border border-white" id="search_list"
+                      style="min-width:100%;display:none;position: absolute;left: 0px;top: 50px;z-index: 2000; overflow-y:auto; max-height: 500%;">
                       <ul class="list-group list-group-flush text-dark" id="search_ul" style="cursor:default;">
                       </ul>
                     </div>
@@ -261,11 +262,11 @@
                 </div>
               </div>
               <!-- 地区 -->
-              <div class="row h-30">
+              <div class="row h-20 border-bottom border-light">
                 <div class="col-2 d-flex justify-content-center align-items-center h-100 no-padding">地区</div>
                 <div class="col h-100">
                   <!-- 省份 -->
-                  <div class="row h-30">
+                  <div class="row h-50">
                     <div class="col-2 d-flex justify-content-start align-items-center">省：</div>
                     <div class="col d-flex justify-content-start align-items-center">
                       <div class="btn-group mr-1">
@@ -280,7 +281,7 @@
                     </div>
                   </div>
                   <!-- 市 -->
-                  <div class="row h-30">
+                  <div class="row h-50">
                     <div class="col-2 d-flex justify-content-start align-items-center">市：</div>
                     <div class="col d-flex justify-content-start align-items-center">
                       <div class="btn-group mr-1">
@@ -293,20 +294,12 @@
                       </div>
                     </div>
                   </div>
-                  <!-- 县 -->
-                  <div class="row h-30">
-                    <div class="col-2 d-flex justify-content-start align-items-center">县：</div>
-                    <div class="col d-flex justify-content-start align-items-center">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-info btn-sm" id="county_name">不限</button>
-                        <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu" id="distract_county" style="cursor: pointer;"></div>
-                      </div>
-                    </div>
-                  </div>
+                </div>
+              </div>
+              <!-- 提交设置 -->
+              <div class="row h-10">
+                <div class="col d-flex justify-content-center align-items-center pr-0">
+                  <button id="options_submit" type="button" class="btn btn-sm btn-primary text-white">&nbsp;&nbsp;提&nbsp;交&nbsp;设&nbsp;置&nbsp;&nbsp;</button>
                 </div>
               </div>
             </div>
@@ -335,9 +328,12 @@
   <!-- 引入echarts文件///////////////////////////////////////////////////////////////////////////////////////// -->
   <script src="js/echarts.min.js"></script>
   <!-- 引入自定义js文件 -->
+  <script src='data/data_part.js'></script>
+  <script src='data/data_person1000.js'></script>
   <script src='js/ChineseDistricts.js'></script>
   <script src='js/classificationOfOccupations.js'></script>
   <script>document.write('<script src="js/group.js?time=' + new Date().getTime() + '"><\/script>');</script>
+  <div id="test2020">test</div>
 </body>
 
 </html>

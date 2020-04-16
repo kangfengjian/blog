@@ -2,45 +2,7 @@ var personal_data;//全局变量，对象，用来存储一个人的各项数据
 var category_data;//全局变量，对象，用来存储各小类的所属及其他信息
 var items = {};//指标信息，用于第二列下部的展示，每个大类对应的指标信息
 var illness_data = {};//存储疾病信息，包括近十年风险预测，危险因素和建议
-// 获取类别数据
-function getCategoryData() {
-  category_data = [
-    { "name": "吸烟", "type": ["心脑血管", "冠心病", "脑卒中", "糖尿病",], "min_normal_value": 0, "max_normal_value": 0 },
-    { "name": "收缩压", "type": ["心脑血管", "冠心病", "脑卒中", "代谢综合征", "糖尿病", "慢性肾病", "高血压", "房颤",], "min_normal_value": 90, "max_normal_value": 139 },
-    { "name": "舒张压", "type": ["心脑血管", "冠心病", "代谢综合征", "慢性肾病", "高血压", "房颤",], "min_normal_value": 60, "max_normal_value": 89 },
-    { "name": "体质指数", "type": ["心脑血管", "冠心病", "脑卒中", "代谢综合征", "糖尿病", "慢性肾病", "高血压",], "min_normal_value": 18.5, "max_normal_value": 24 },
-    { "name": "空腹血糖", "type": ["心脑血管", "冠心病", "脑卒中", "代谢综合征", "糖尿病", "慢性肾病", "高血压",], "min_normal_value": 3.89, "max_normal_value": 6.11 },
-    { "name": "血肌酐", "type": ["心脑血管", "冠心病",], "min_normal_value": 0, "max_normal_value": 124 },
-    { "name": "甘油三酯", "type": ["心脑血管", "代谢综合征", "高血压",], "min_normal_value": 0.3, "max_normal_value": 1.7 },
-    { "name": "总胆固醇", "type": ["心脑血管", "冠心病", "脑卒中", "代谢综合征", "高血压",], "min_normal_value": 0, "max_normal_value": 6 },
-    { "name": "高密度脂蛋白胆固醇", "type": ["心脑血管", "冠心病", "脑卒中", "糖尿病", "慢性肾病", "高血压",], "min_normal_value": 0.8, "max_normal_value": 2 },
-    { "name": "低密度脂蛋白胆固醇", "type": ["心脑血管", "糖尿病", "慢性肾病",], "min_normal_value": 1, "max_normal_value": 3.37 },
-    { "name": "白细胞计数", "type": ["心脑血管", "脑卒中", "代谢综合征", "糖尿病",], "min_normal_value": 3.5, "max_normal_value": 9.5 },
-    { "name": "红细胞计数", "type": ["心脑血管",], "min_normal_value": 3.8, "max_normal_value": 5.8 },
-    { "name": "淋巴细胞计数", "type": ["代谢综合征",], "min_normal_value": 1.1, "max_normal_value": 3.2 },
-    { "name": "中性粒细胞计数", "type": ["代谢综合征",], "min_normal_value": 1.8, "max_normal_value": 6.3 },
-    { "name": "红细胞比容", "type": ["心脑血管", "代谢综合征",], "min_normal_value": 37, "max_normal_value": 50 },
-    { "name": "饮酒", "type": ["脑卒中",], "min_normal_value": 0, "max_normal_value": 0 },
-    { "name": "高血压", "type": ["脑卒中",], "min_normal_value": 0, "max_normal_value": 0 },
-    { "name": "糖尿病", "type": ["冠心病", "脑卒中",], "min_normal_value": 0, "max_normal_value": 0 },
-    { "name": "贫血", "type": ["慢性肾病",], "min_normal_value": 0, "max_normal_value": 0 },
-    { "name": "心血管疾病", "type": ["慢性肾病",], "min_normal_value": 0, "max_normal_value": 0 },
-  ];
-  var ajaxjson;
-  $.ajax({
-    url: "php/query.php", success: function (result) {
-      ajaxjson = result;
-    }, type: 'post', async: false, data: { 'type': 3, }
-  });
-  // $("#test").text(ajaxjson);
-  category_data = JSON.parse(ajaxjson);
-  for (var i = 0; i < category_data.length; i++) {
-    category_data[i]["class"] = category_data[i]["class"].split('，');
-  };
-  // $("#test").text(JSON.stringify(category_data));
-  // personal_data=obj[0];
-  // category_data
-}
+
 //一切从这里开始************************************************************************************************
 $(document).ready(function () {
   var str = window.location.href
@@ -62,21 +24,15 @@ $(document).ready(function () {
     //没有id输入
     loadByNoId();
   }
-  // getCategoryData();
-  // show_time();
-  // getId(window.location.href);
-
-  // });id
 });
 //在有id的情况下加载页面****
 function loadById(id) {
   showTime();
   drawPersonInfo(id);
-  drawCureProcess(id); id
+  drawCureProcess(id);
   drawTotalHealthIndex(id);
   drawParts(id);
   drawDiseaseTendency(id);
-
 }
 //在没有id的情况下加载页面***
 function loadByNoId() {
@@ -459,7 +415,7 @@ function drawDiseaseTendency(id) {
   showIllnessMessage(2, '脑卒中');
   showIllnessMessage(3, '高血压');
 }
-//时间
+//时间***********
 function showTime() {
   var myDate = new Date;
   var year = myDate.getFullYear(); //获取当前年
@@ -477,7 +433,7 @@ function showTime() {
 function show_something() {
   $("#total_health_con").show();
 }
-//绘制个人信息
+//绘制个人信息***
 function drawPersonInfo(id) {
   $('#a_personal').attr('href', 'personal_bigscreen.html?id=' + id);
   $('#a_group').attr('href', 'group_bigscreen.html?id=' + id);

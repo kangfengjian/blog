@@ -68,65 +68,701 @@ function getPersonalData(id) {
     "心血管疾病": "否",
   }
 }
-//一切从这里开始
+var options = {
+  '年龄': '不限',
+  '性别': '不限',
+  '学历': '不限',
+  '职业': '不限,不限',
+  '收入': '不限',
+  '婚姻': '不限',
+  '地区': '不限,不限',
+};
+var options_temp = {
+  '年龄': '不限',
+  '性别': '不限',
+  '学历': '不限',
+  '职业': '不限,不限',
+  '收入': '不限',
+  '婚姻': '不限',
+  '地区': '不限,不限',
+};
+var data_charts = {};
+//一切从这里开始************************************************************************************************
 $(document).ready(function () {
-  show_time();
-  getId(window.location.href);
-  $('#title_name_search').click(function () {
-    getIdBySearch();
-  });
-});
-//获取id
-function getId(str) {
-  var id;
-  // 在url中解析出id，成功则返回id
+  var str = window.location.href
   var n = str.indexOf("id=");
   if (n != -1) {
+    //有id输入
     id = parseInt(str.substring(n + 3));
     if (isNaN(id)) {
-      getIdBySearch();
+      //id格式有误，加载无id页面并弹出警告
+      loadByNoId();
+      alert("ID格式有误");
     }
     else {
-
-      drawHtml(id);
+      //成功获取id
+      loadById(id);
     }
   }
   else {
-    getIdBySearch();
+    //没有id输入
+    loadByNoId();
   }
+});
+//在有id的情况下加载页面****
+function loadById(id) {
+  showTime();
+  drawPersonInfo(id);
+  showOptions();
+  // drawCureProcess(id);
+  // drawTotalHealthIndex(id);
+  // drawParts(id);
+  // drawDiseaseTendency(id);
+  // getDataCharts(id);
+    
+  // }
+  // $("#test2020").text(s);
+  // // var myDate = ;
+  // var year = myDate; //获取当前年
 }
-// 通过搜索框获取id，当在url中获取失败时调用
-function getIdBySearch() {
+//在没有id的情况下加载页面***
+function loadByNoId() {
+  showTime();
+  searchDiv();
+  showOptions();
+  // drawCureProcess('no_id');
+  // drawTotalHealthIndex('no_id');
+  // drawParts('no_id');
+  // drawDiseaseTendency('no_id');
+}
+//时间***********
+function showTime() {
+  var myDate = new Date;
+  var year = myDate.getFullYear(); //获取当前年
+  var mon = myDate.getMonth() + 1; //获取当前月
+  var date = myDate.getDate(); //获取当前日
+  var week = myDate.getDay();
+  var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+  time_str = year + "-" + mon + "-" + date + " " + weeks[week];
+  $("#now_time").append('<span class="iconfont icon-riqi font-big1_5"> </span>');
+  $("#now_time").append('<div>' + time_str + '</div>');
+}
+//绘制个人信息****
+function drawPersonInfo(id) {
+  $('#a_personal').attr('href', 'personal_bigscreen.html?id=' + id);
+  $('#a_group').attr('href', 'group_bigscreen.html?id=' + id);
+  $('#title_name').show();
+  $('#title_info').show();
+  var myDate = new Date();
+  $('#title_name_h1').text(data_person[id]['姓名']);
+  $('#title_info_sex').text(data_person[id]['性别']);
+  $('#title_info_age').text(myDate.getFullYear() - parseInt(data_person[id]['生日']) + '岁');
+  $('#title_info_nation').text(data_person[id]['民族']);
+  $('#title_info_job').text(data_person[id]['工作']);
+  $('#title_info_address').text(data_person[id]['现居地']);
+  $('#title_name_search').click(function () {
+    searchDiv();
+  });
+}
+//显示搜索框***
+function searchDiv() {
+  //该隐藏的都隐藏
   $("#title_name").css("cssText", 'display:none !important');
   $("#title_info").css("cssText", 'display:none !important');
   $('#search_div').show();
+  //输入回车或点击搜索按钮后
+  $("input#search_input").keydown(function (e) {
+    if (e.which == 13) {
+      $("#search_button").trigger("click");
+      return false;
+    }
+  });
   $("#search_button").click(function () {
+    var str = $("#search_input").val();
+    var id = parseInt(str);
+    var ajaxjson;
+    if (!isNaN(id)) {
+      //搜索的是id
+      //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
+      ajaxjson = get_person_brief_info_by_id_from_js(id);
+    }
+    else {
+      //搜索的是名字
+      //调用函数获取搜索结果列表，结果的内容是姓名、性别、生日、现居地。
+      ajaxjson = get_person_brief_info_by_name_from_js(str);
+    }
+    var str_append = '';
+    if (ajaxjson.length == 0) {
+      str_append = '<li class="list-group-item" style="line-height:10px;">未找到相关信息</li>';
+    }
+    else {
+      for (var i = 0; i < ajaxjson.length; i++) {
+        str_append += '<li class="list-group-item" style="line-height:10px;"><a href="group_bigscreen.html?id=' + ajaxjson[i][0] + '">' + ajaxjson[i][1] + '</a></li>';
+      }
+    }
     $('#search_ul').empty();
-    $("#search_ul").append('<li class="list-group-item" style="line-height:10px;">张三 男 山东省聊城市</li>');
+    $("#search_ul").append(str_append);
     $("#search_list").show();
-    $("#search_ul>li").click(function () {
-      // 隐藏搜索框
-      // $("#search_div").css('display', 'none !important');
-      $("#search_div").css("cssText", 'display:none !important');
-      $("#search_list").hide();
-      // 显示姓名标题
-      $("#title_name").show();
-      drawHtml(1);
-    });
   });
 }
-//计算总体健康指数
-function getTotalHealthIndex() {
-  return 102.66;
-}
-function getData(id) {
-  for (var i in radar_data) {
-    radar_data[i]['当前值'] -= 5;
+function get_person_brief_info_by_id_from_js(id) {
+  // alert(data_person[0]['姓名']);姓名、性别、生日、现居地
+  // 根据id查找人并返回信息，如果查找不到则返回空集。返回结果是一个数组，数组里含有多条查找到得信息，每条数据是一个id加一个字符串
+  if (id in data_person) {
+    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地']]];
   }
-  for (var j in bar_data) {
-    bar_data[j]['我的排名'] += 50;
+  else {
+    return [];
   }
 }
+function get_person_brief_info_by_name_from_js(name) {
+  var ar = [];
+  for (key in data_person) {
+    if (data_person[key]['姓名'] == name) {
+      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地']]);
+    }
+  }
+  return ar;
+}
+function showOptions() {
+  $("#second_row_options").show();
+  listen_age();
+  listen_gender();
+  listen_edubg();
+  listen_occupation();
+  listen_income();
+  listen_marriage();
+  listen_region();
+  listen_submit();
+}
+function listen_age() {
+  // 鼠标移入范围
+  $("#options_age_range").mouseenter(function () {
+    $(this).css("background-color", "#17A2B8");
+    $("#options_age_range>input").css("background-color", "white");
+    $("#options_age_range>input").css("color", "black");
+    $("#options_age_range_button").show();
+  });
+  // 鼠标移出范围
+  $("#options_age_range").mouseleave(function () {
+    if ($(this).attr("value") == 'false') {
+      $(this).css("background-color", "transparent");
+      $("#options_age_range>input").css("background-color", "white");
+      $("#options_age_range>input").css("color", "black");
+    }
+    else {
+      $(this).css("background-color", "#17A2B8");
+      $("#options_age_range>input").css("background-color", "#17A2B8");
+      $("#options_age_range>input").css("color", "white");
+    }
+    $("#options_age_range_button").hide();
+  });
+  // 点击确定按钮
+  $('#options_age_range_button').click(function () {
+    var a = parseInt($('#options_age_range_min').val());
+    var b = parseInt($('#options_age_range_max').val());
+    if (!isNaN(a) && !isNaN(b) && a <= b) {
+      // range_data['年龄'][0] = a;
+      // range_data['年龄'][1] = b;
+      options_temp['年龄'] = a + ',' + b;
+      $('#options_age_no').attr("value", "false");
+      $('#options_age_no').css("background-color", "transparent");
+      $('#options_age_range>input').css("background-color", "#17A2B8");
+      $('#options_age_range>input').css("color", "white");
+      $('#options_age_range').attr("value", 'true');
+      $(this).hide();
+    }
+    else {
+      alert('输入有误!!');
+      $('#options_age_range').attr("value", 'false');
+      $('#options_age_no').css('background-color', "#17A2B8");
+    }
+  });
+  // 不限年龄按钮
+  $('#options_age_no').click(function () {
+    $('#options_age_range_min').val('');
+    $('#options_age_range_max').val('');
+    if ($(this).attr("value") == 'false') {
+      options_temp['年龄'] = '不限';
+      $(this).attr("value", 'true');
+      $(this).css("background-color", "#17A2B8");
+      $("#options_age_range").attr("value", "false");
+      $("#options_age_range>input").css("background-color", "white");
+      $("#options_age_range>input").css("color", "black");
+      $("#options_age_range").css("background-color", "transparent");
+    }
+  });
+}
+function listen_gender() {
+  $("#options_gender_man").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_gender_woman').css('background-color', 'transparent');
+      $('#options_gender_woman').attr('value', 'false');
+      $('#options_gender_no').css('background-color', 'transparent');
+      $('#options_gender_no').attr('value', 'false');
+      options_temp['性别'] = '男';
+    }
+  });
+  $("#options_gender_no").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_gender_woman').css('background-color', 'transparent');
+      $('#options_gender_woman').attr('value', 'false');
+      $('#options_gender_man').css('background-color', 'transparent');
+      $('#options_gender_man').attr('value', 'false');
+      options_temp['性别'] = '不限';
+    }
+  });
+  $("#options_gender_woman").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_gender_man').css('background-color', 'transparent');
+      $('#options_gender_man').attr('value', 'false');
+      $('#options_gender_no').css('background-color', 'transparent');
+      $('#options_gender_no').attr('value', 'false');
+      options_temp['性别'] = '女';
+    }
+  });
+}
+function listen_edubg() {
+  $("#options_eduction_doctor").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_master").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_bachelor").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_junior").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_seniorhigh").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_juniorhigh").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_primary").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_illiteracy").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+  $("#options_eduction_no").click(function (e) {
+    $("#options_education_name").text(e.target.innerHTML);
+    options_temp['学历'] = e.target.innerHTML;
+  });
+}
+function listen_occupation() {
+  $('#job_bigjob').empty();
+  for (var bigjob_code in classificationOfOccupations[86]) {
+    str = '<a class="dropdown-item font-small9" id="zy' + bigjob_code + '">' + classificationOfOccupations[86][bigjob_code] + '</a>'
+    $('#job_bigjob').append(str);
+    // 大类的点击
+    $('#zy' + bigjob_code).click(function (e) {
+      options_temp['职业'] = e.target.innerHTML + ',不限';
+      var bigjob_str = e.target.innerHTML;
+      if (bigjob_str.length > 12) {
+        bigjob_str = bigjob_str.substring(0, 12) + '…';
+      }
+      $('#bigjob_name').text(bigjob_str);
+      $('#smalljob_name').text('不限');
+      var bigjob_code2 = e.target.id.substring(2);
+      // 初始化小类菜单
+      $('#job_smalljob').empty();
+      for (smalljob_code in classificationOfOccupations[bigjob_code2]) {
+        var smalljob_str = '<a class="dropdown-item font-small9" id="zy' + smalljob_code + '">' + classificationOfOccupations[bigjob_code2][smalljob_code] + '</a>';
+        $('#job_smalljob').append(smalljob_str);
+        // 小类的点击
+        $('#zy' + smalljob_code).click(function (ee) {
+          options_temp['职业'] = options_temp['职业'].substring(0, options_temp['职业'].indexOf(',')) + ',' + ee.target.innerHTML;
+          var smalljob_str2 = ee.target.innerHTML;
+          if (smalljob_str2.length > 12) {
+            smalljob_str2 = smalljob_str2.substring(0, 12) + '…';
+          }
+          $('#smalljob_name').text(smalljob_str2);
+        });
+      }
+      $('#job_smalljob').append('<div class="dropdown-divider"></div>');
+      $('#job_smalljob').append('<a class="dropdown-item font-small9" id="smalljob_no">不限</a>');
+      $('#smalljob_no').click(function () {
+        $('#smalljob_name').text('不限');
+      });
+      // 初始化小类菜单结束
+    });
+  }
+  $('#job_bigjob').append('<div class="dropdown-divider"></div>');
+  $('#job_bigjob').append('<a class="dropdown-item font-small9" id="bigjob_no">不限</a>');
+  $('#bigjob_no').click(function () {
+    options_temp['职业'] = '不限,不限';
+    $('#job_smalljob').empty();
+    $('#bigjob_name').text('不限');
+    $('#smalljob_name').text('不限');
+  });
+}
+function listen_income() {
+  // 鼠标移入范围收入
+  $("#options_income_range").mouseenter(function () {
+    $(this).css("background-color", "#17A2B8");
+    $("#options_income_range>input").css("background-color", "white");
+    $("#options_income_range>input").css("color", "black");
+    $("#options_income_range_button").show();
+  });
+  // 鼠标移出范围收入
+  $("#options_income_range").mouseleave(function () {
+    if ($(this).attr("value") == 'false') {
+      $(this).css("background-color", "transparent");
+      $("#options_income_range>input").css("background-color", "white");
+      $("#options_income_range>input").css("color", "black");
+    }
+    else {
+      $(this).css("background-color", "#17A2B8");
+      $("#options_income_range>input").css("background-color", "#17A2B8");
+      $("#options_income_range>input").css("color", "white");
+    }
+    $("#options_income_range_button").hide();
+  });
+  // 点击确定按钮收入
+  $('#options_income_range_button').click(function () {
+    var a = parseInt($('#options_income_range_min').val());
+    var b = parseInt($('#options_income_range_max').val());
+    if (!isNaN(a) && !isNaN(b) && a <= b) {
+      // range_data['收入'][0] = a;
+      // range_data['收入'][1] = b;
+      options_temp['收入'] = a + ',' + b;
+      $('#options_income_no').attr("value", "false");
+      $('#options_income_no').css("background-color", "transparent");
+      $('#options_income_range>input').css("background-color", "#17A2B8");
+      $('#options_income_range>input').css("color", "white");
+      $('#options_income_range').attr("value", 'true');
+      $(this).hide();
+    }
+    else {
+      alert('输入有误!!');
+      $('#options_income_range').attr("value", 'false');
+      $('#options_income_no').css('background-color', "#17A2B8");
+    }
+  });
+  // 不限收入按钮
+  $('#options_income_no').click(function () {
+    if ($(this).attr("value") == 'false') {
+      // range_data['收入'][0] = 0;
+      // range_data['收入'][1] = 150;
+      options_temp['收入'] = '不限';
+      $(this).attr("value", 'true');
+      $(this).css("background-color", "#17A2B8");
+      $("#options_income_range").attr("value", "false");
+      $("#options_income_range>input").css("background-color", "white");
+      $("#options_income_range>input").css("color", "black");
+      $("#options_income_range").css("background-color", "transparent");
+    }
+  });
+}
+function listen_marriage() {
+  // 未婚
+  $("#options_marriage_lonely").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_marriage_happy').css('background-color', 'transparent');
+      $('#options_marriage_happy').attr('value', 'false');
+      $('#options_marriage_sorry').css('background-color', 'transparent');
+      $('#options_marriage_sorry').attr('value', 'false');
+      $('#options_marriage_likedead').css('background-color', 'transparent');
+      $('#options_marriage_likedead').attr('value', 'false');
+      $('#options_marriage_no').css('background-color', 'transparent');
+      $('#options_marriage_no').attr('value', 'false');
+      options_temp['婚姻'] = '未婚';
+    }
+  });
+  // 已婚
+  $("#options_marriage_happy").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_marriage_lonely').css('background-color', 'transparent');
+      $('#options_marriage_lonely').attr('value', 'false');
+      $('#options_marriage_sorry').css('background-color', 'transparent');
+      $('#options_marriage_sorry').attr('value', 'false');
+      $('#options_marriage_likedead').css('background-color', 'transparent');
+      $('#options_marriage_likedead').attr('value', 'false');
+      $('#options_marriage_no').css('background-color', 'transparent');
+      $('#options_marriage_no').attr('value', 'false');
+      options_temp['婚姻'] = '已婚';
+    }
+  });
+  // 离婚
+  $("#options_marriage_sorry").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_marriage_happy').css('background-color', 'transparent');
+      $('#options_marriage_happy').attr('value', 'false');
+      $('#options_marriage_lonely').css('background-color', 'transparent');
+      $('#options_marriage_lonely').attr('value', 'false');
+      $('#options_marriage_likedead').css('background-color', 'transparent');
+      $('#options_marriage_likedead').attr('value', 'false');
+      $('#options_marriage_no').css('background-color', 'transparent');
+      $('#options_marriage_no').attr('value', 'false');
+      options_temp['婚姻'] = '离婚';
+    }
+  });
+  // 丧偶
+  $("#options_marriage_likedead").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_marriage_happy').css('background-color', 'transparent');
+      $('#options_marriage_happy').attr('value', 'false');
+      $('#options_marriage_sorry').css('background-color', 'transparent');
+      $('#options_marriage_sorry').attr('value', 'false');
+      $('#options_marriage_lonely').css('background-color', 'transparent');
+      $('#options_marriage_lonely').attr('value', 'false');
+      $('#options_marriage_no').css('background-color', 'transparent');
+      $('#options_marriage_no').attr('value', 'false');
+      options_temp['婚姻'] = '丧偶';
+    }
+  });
+  // 不限
+  $("#options_marriage_no").click(function () {
+    if ($(this).attr('value') == 'false') {
+      $(this).css('background-color', '#17A2B8');
+      $(this).attr('value', 'true');
+      $('#options_marriage_happy').css('background-color', 'transparent');
+      $('#options_marriage_happy').attr('value', 'false');
+      $('#options_marriage_sorry').css('background-color', 'transparent');
+      $('#options_marriage_sorry').attr('value', 'false');
+      $('#options_marriage_likedead').css('background-color', 'transparent');
+      $('#options_marriage_likedead').attr('value', 'false');
+      $('#options_marriage_lonely').css('background-color', 'transparent');
+      $('#options_marriage_lonely').attr('value', 'false');
+      options_temp['婚姻'] = '不限';
+    }
+  });
+}
+function listen_region() {
+  $('#distract_province').empty();
+  for (var province_code in ChineseDistricts[86]) {
+    str = '<a class="dropdown-item font-small9" id="dq' + province_code + '">' + ChineseDistricts[86][province_code] + '</a>'
+    $('#distract_province').append(str);
+    // 省份的点击
+    $('#dq' + province_code).click(function (e) {
+      options_temp['地区'] = e.target.innerHTML + ',不限';
+      $('#province_name').text(e.target.innerHTML);
+      $('#city_name').text('不限');
+      var province_code2 = e.target.id.substring(2);
+      // 初始化市级菜单
+      $('#distract_city').empty();
+      for (city_code in ChineseDistricts[province_code2]) {
+        city_str = '<a class="dropdown-item font-small9" id="dq' + city_code + '">' + ChineseDistricts[province_code2][city_code] + '</a>';
+        $('#distract_city').append(city_str);
+        // 市级的点击
+        $('#dq' + city_code).click(function (ee) {
+          // range_data['地区'][1] = ee.target.innerHTML;          
+          options_temp['地区'] = options_temp['地区'].substring(0, options_temp['地区'].indexOf(',')) + ',' + ee.target.innerHTML;
+          // range_data['地区'][2] = '不限';
+          $('#city_name').text(ee.target.innerHTML);
+          // $('#county_name').text('不限');
+          var city_code2 = ee.target.id.substring(2);
+          // 初始化县级菜单
+          // $('#distract_county').empty();
+          // for (county_code in ChineseDistricts[city_code2]) {
+          //   // $('#test').text(county_code);
+          //   county_str = '<a class="dropdown-item font-small9" id="dq' + county_code + '">' + ChineseDistricts[city_code2][county_code] + '</a>';
+          //   $('#distract_county').append(county_str);
+          //   // 县级的点击
+          //   $('#dq' + county_code).click(function (eee) {
+          //     range_data['地区'][2] = eee.target.innerHTML;
+          //     $('#county_name').text(eee.target.innerHTML);
+          //     getData(id);
+          //     drawRadar();
+          //     drawBar();
+          //   });
+          // }
+          // $('#distract_county').append('<div class="dropdown-divider"></div>');
+          // $('#distract_county').append('<a class="dropdown-item font-small9" id="county_no">不限</a>');
+          // $('#county_no').click(function () {
+          //   range_data['地区'][2] = '不限';
+          //   $('#county_name').text('不限');
+          //   getData(id);
+          //   drawRadar();
+          //   drawBar();
+          // });
+          //初始化县菜单结束
+          // getData(id);
+          // drawRadar();
+          // drawBar();
+        });
+      }
+      $('#distract_city').append('<div class="dropdown-divider"></div>');
+      $('#distract_city').append('<a class="dropdown-item font-small9" id="city_no">不限</a>');
+      $('#city_no').click(function () {
+        // range_data['地区'][1] = '不限';
+        // range_data['地区'][2] = '不限';
+        $('#distract_county').empty();
+        $('#city_name').text('不限');
+        $('#county_name').text('不限');
+        // getData(id);
+        // drawRadar();
+        // drawBar();
+      });
+      // 初始化市级菜单结束
+      // 重新获取数据并画图
+      // getData(id);
+      // drawRadar();
+      // drawBar();
+    });
+
+  }
+  $('#distract_province').append('<div class="dropdown-divider"></div>');
+  $('#distract_province').append('<a class="dropdown-item font-small9" id="province_no">不限</a>');
+  $('#province_no').click(function () {
+    // range_data['地区'][0] = '不限';
+    // range_data['地区'][1] = '不限';
+    // range_data['地区'][1] = '不限';
+    options_temp['地区'] = '不限,不限';
+    $('#distract_city').empty();
+    $('#distract_county').empty();
+    $('#province_name').text('不限');
+    $('#city_name').text('不限');
+    $('#county_name').text('不限');
+    // getData(id);
+    // drawRadar();
+    // drawBar();
+  });
+}
+function listen_submit() {
+  $('#options_submit').click(function () {
+    for (i in options) {
+      options[i] = options_temp[i];
+    }
+    drawtu();
+    // var s = ''
+    // for (i in options) {
+    //   s += i + ':';
+    //   s += options[i] + '\n';
+    // }
+    // $("#test2020").text(s);
+  });
+}
+function getDataCharts(id) {
+  var parts = [];
+  var num = 1;
+  for (i in data_part) {
+    data_charts[i] = {};
+    data_charts[i]['common'] = data_part[i]['common'];
+    data_charts[i]['good'] = data_part[i]['good'];
+    data_charts[i]['score'] = data_person[id][i + '得分'];
+    data_charts[i]['average'] = data_person[id][i + '得分'];
+    data_charts[i]['good_num'] = 0;
+    data_charts[i]['common_num'] = 0;
+    data_charts[i]['danger_num'] = 0;
+    data_charts[i]['myrank'] = 1;
+    if (data_person[id][i + '得分'] >= data_charts[i]['good']) {
+      data_charts[i]['good_num'] += 1;
+    }
+    else if (data_person[id][i + '得分'] >= data_charts[i]['common']) {
+      data_charts[i]['common_num'] += 1;
+    }
+    else {
+      data_charts[i]['danger_num'] += 1;
+    }
+    parts.push(i);
+  }
+  for (i in data_person) {
+    if (i == id) {
+      continue;
+    }
+    if (person_in_range(data_person[i])){
+      num += 1;
+      for (k in parts) {
+        var j=parts[k];
+        data_charts[j]['average'] = data_charts[j]['average'] * (num - 1 / num) + data_person[i][j + '得分'] * (1 / num);
+        if (data_person[i][j + '得分'] >= data_charts[j]['good']) {
+          data_charts[j]['good_num'] += 1;
+        }
+        else if (data_person[i][j + '得分'] >= data_charts[j]['common']) {
+          data_charts[j]['common_num'] += 1;
+        }
+        else {
+          data_charts[j]['danger_num'] += 1;
+        }
+        if (data_person[i][j + '得分'] > data_person[id][j + '得分']) {
+          data_charts[j]['myrank'] += 1;
+        }
+      }
+    }
+  }
+  data_charts['num']=num;
+}
+function person_in_range(p) {
+  // alert(p['姓名']);
+  if (options['年龄'] != '不限' && (new Date().getFullYear() - parseInt(p['生日']) < parseInt(options['年龄'].split(',')[0]) || new Date().getFullYear() - parseInt(p['生日']) > parseInt(options['年龄'].split(',')[1]))) {
+    return false;
+  }
+  if (options['性别'] != '不限' && options['性别'] != p['性别']) {
+    return false;
+  }
+  if (options['学历'] != '不限' && options['学历'] != p['学历']) {
+    return false;
+  }
+  if (options['婚姻'] != '不限' && options['婚姻'] != p['婚姻状况']) {
+    return false;
+  }
+  if (options['收入'] != '不限' && (p['收入'] < parseInt(options['收入'].split(',')[0]) || p['收入'] > parseInt(options['收入'].split(',')[1]))) {
+    return false;
+  }
+  if (options['职业'].split(',')[0] != '不限' && options['职业'].split(',')[0] != p['工作'].split(',')[0]) {
+    return false;
+  }
+  if (options['职业'].split(',')[1] != '不限' && options['职业'].split(',')[1] != p['工作'].split(',')[1]) {
+    return false;
+  }
+  if (options['地区'].split(',')[0] != '不限' && options['现居地'].split(',')[0] != p['工作'].split(',')[0]) {
+    return false;
+  }
+  if (options['地区'].split(',')[1] != '不限' && options['现居地'].split(',')[1] != p['工作'].split(',')[1]) {
+    return false;
+  }
+  
+  return true;
+}
+
+function drawtu(){
+  getDataCharts(id);
+  var s = data_person[0]['姓名'];
+  for (i in data_charts){
+    s+=i+':';
+    s+=data_charts[i];
+    // for(j in data_charts[i]){
+    //   s+=j+',';
+    //   s+=data_charts[i][j]+';';
+
+    // }
+    
+    
+  }
+  $("#test2020").text(s);
+  // var myDate = ;
+  // var year = myDate; //获取当前年
+  alert("sfa");
+}
+
+
+
 // 雷达图
 function drawRadar() {
   var radar = echarts.init(document.getElementById("radar"));
@@ -416,517 +1052,9 @@ function drawBar() {
     bar.setOption(bar_option, true)
   }
 }
-function handle_options(id) {
-  //对各个选项监听并生成range
-  //地区/*************************************************************** */
-  range_data['地区'] = ['不限', '不限', '不限',];
-  $('#distract_province').empty();
-  for (var province_code in ChineseDistricts[86]) {
-    str = '<a class="dropdown-item font-small9" id="dq' + province_code + '">' + ChineseDistricts[86][province_code] + '</a>'
-    $('#distract_province').append(str);
-    // 省份的点击
-    $('#dq' + province_code).click(function (e) {
-      range_data['地区'][0] = e.target.innerHTML;
-      range_data['地区'][1] = '不限';
-      range_data['地区'][2] = '不限';
-      $('#province_name').text(e.target.innerHTML);
-      $('#city_name').text('不限');
-      $('#county_name').text('不限');
-      var province_code2 = e.target.id.substring(2);
-      // 初始化市级菜单
-      $('#distract_city').empty();
-      for (city_code in ChineseDistricts[province_code2]) {
-        city_str = '<a class="dropdown-item font-small9" id="dq' + city_code + '">' + ChineseDistricts[province_code2][city_code] + '</a>';
-        $('#distract_city').append(city_str);
-        // 市级的点击
-        $('#dq' + city_code).click(function (ee) {
-          range_data['地区'][1] = ee.target.innerHTML;
-          range_data['地区'][2] = '不限';
-          $('#city_name').text(ee.target.innerHTML);
-          $('#county_name').text('不限');
-          var city_code2 = ee.target.id.substring(2);
-          // 初始化县级菜单
-          $('#distract_county').empty();
-          for (county_code in ChineseDistricts[city_code2]) {
-            // $('#test').text(county_code);
-            county_str = '<a class="dropdown-item font-small9" id="dq' + county_code + '">' + ChineseDistricts[city_code2][county_code] + '</a>';
-            $('#distract_county').append(county_str);
-            // 县级的点击
-            $('#dq' + county_code).click(function (eee) {
-              range_data['地区'][2] = eee.target.innerHTML;
-              $('#county_name').text(eee.target.innerHTML);
-              getData(id);
-              drawRadar();
-              drawBar();
-            });
-
-          }
-          $('#distract_county').append('<div class="dropdown-divider"></div>');
-          $('#distract_county').append('<a class="dropdown-item font-small9" id="county_no">不限</a>');
-          $('#county_no').click(function () {
-            range_data['地区'][2] = '不限';
-            $('#county_name').text('不限');
-            getData(id);
-            drawRadar();
-            drawBar();
-          });
-          //初始化县菜单结束
-          getData(id);
-          drawRadar();
-          drawBar();
-        });
-      }
-      $('#distract_city').append('<div class="dropdown-divider"></div>');
-      $('#distract_city').append('<a class="dropdown-item font-small9" id="city_no">不限</a>');
-      $('#city_no').click(function () {
-        range_data['地区'][1] = '不限';
-        range_data['地区'][2] = '不限';
-        $('#distract_county').empty();
-        $('#city_name').text('不限');
-        $('#county_name').text('不限');
-        getData(id);
-        drawRadar();
-        drawBar();
-      });
-      // 初始化市级菜单结束
-      // 重新获取数据并画图
-      getData(id);
-      drawRadar();
-      drawBar();
-    });
-
-  }
-  $('#distract_province').append('<div class="dropdown-divider"></div>');
-  $('#distract_province').append('<a class="dropdown-item font-small9" id="province_no">不限</a>');
-  $('#province_no').click(function () {
-    range_data['地区'][0] = '不限';
-    range_data['地区'][1] = '不限';
-    range_data['地区'][1] = '不限';
-    $('#distract_city').empty();
-    $('#distract_county').empty();
-    $('#province_name').text('不限');
-    $('#city_name').text('不限');
-    $('#county_name').text('不限');
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  // 年龄/*************************************************************************** */
-  range_data['年龄'][0] = 0;
-  range_data['年龄'][1] = 150;
-  // 鼠标移入范围
-  $("#options_age_range").mouseenter(function () {
-    $(this).css("background-color", "#17A2B8");
-    $("#options_age_range>input").css("background-color", "white");
-    $("#options_age_range>input").css("color", "black");
-    $("#options_age_range_button").show();
-  });
-  // 鼠标移出范围
-  $("#options_age_range").mouseleave(function () {
-    if ($(this).attr("value") == 'false') {
-      $(this).css("background-color", "transparent");
-      $("#options_age_range>input").css("background-color", "white");
-      $("#options_age_range>input").css("color", "black");
-    }
-    else {
-      $(this).css("background-color", "#17A2B8");
-      $("#options_age_range>input").css("background-color", "#17A2B8");
-      $("#options_age_range>input").css("color", "white");
-    }
-    $("#options_age_range_button").hide();
-  });
-  // 点击确定按钮
-  $('#options_age_range_button').click(function () {
-    var a = parseInt($('#options_age_range_min').val());
-    var b = parseInt($('#options_age_range_max').val());
-    if (!isNaN(a) && !isNaN(b) && a <= b) {
-      range_data['年龄'][0] = a;
-      range_data['年龄'][1] = b;
-      $('#options_age_no').attr("value", "false");
-      $('#options_age_no').css("background-color", "transparent");
-      $('#options_age_range>input').css("background-color", "#17A2B8");
-      $('#options_age_range>input').css("color", "white");
-      $('#options_age_range').attr("value", 'true');
-      $(this).hide();
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-    else {
-      $('#options_age_range').attr("value", 'false');
-      range_data['年龄'][0] = 0;
-      range_data['年龄'][1] = 150;
-      $('#options_age_no').css('background-color', "#17A2B8");
-    }
-  });
-  // 不限年龄按钮
-  $('#options_age_no').click(function () {
-    if ($(this).attr("value") == 'false') {
-      range_data['年龄'][0] = 0;
-      range_data['年龄'][1] = 150;
-      $(this).attr("value", 'true');
-      $(this).css("background-color", "#17A2B8");
-      $("#options_age_range").attr("value", "false");
-      $("#options_age_range>input").css("background-color", "white");
-      $("#options_age_range>input").css("color", "black");
-      $("#options_age_range").css("background-color", "transparent");
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 收入/******************************************************************** */
-  range_data['收入'][0] = 0;
-  range_data['收入'][1] = 100000000;
-  // 鼠标移入范围收入
-  $("#options_income_range").mouseenter(function () {
-    $(this).css("background-color", "#17A2B8");
-    $("#options_income_range>input").css("background-color", "white");
-    $("#options_income_range>input").css("color", "black");
-    $("#options_income_range_button").show();
-  });
-  // 鼠标移出范围收入
-  $("#options_income_range").mouseleave(function () {
-    if ($(this).attr("value") == 'false') {
-      $(this).css("background-color", "transparent");
-      $("#options_income_range>input").css("background-color", "white");
-      $("#options_income_range>input").css("color", "black");
-    }
-    else {
-      $(this).css("background-color", "#17A2B8");
-      $("#options_income_range>input").css("background-color", "#17A2B8");
-      $("#options_income_range>input").css("color", "white");
-    }
-    $("#options_income_range_button").hide();
-  });
-  // 点击确定按钮收入
-  $('#options_income_range_button').click(function () {
-    var a = parseInt($('#options_income_range_min').val());
-    var b = parseInt($('#options_income_range_max').val());
-    if (!isNaN(a) && !isNaN(b) && a <= b) {
-      range_data['收入'][0] = a;
-      range_data['收入'][1] = b;
-      $('#options_income_no').attr("value", "false");
-      $('#options_income_no').css("background-color", "transparent");
-      $('#options_income_range>input').css("background-color", "#17A2B8");
-      $('#options_income_range>input').css("color", "white");
-      $('#options_income_range').attr("value", 'true');
-      $(this).hide();
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-    else {
-      $('#options_income_range').attr("value", 'false');
-      range_data['收入'][0] = 0;
-      range_data['收入'][1] = 100000000;
-      $('#options_income_no').css('background-color', "#17A2B8");
-    }
-  });
-  // 不限收入按钮
-  $('#options_income_no').click(function () {
-    if ($(this).attr("value") == 'false') {
-      range_data['收入'][0] = 0;
-      range_data['收入'][1] = 150;
-      $(this).attr("value", 'true');
-      $(this).css("background-color", "#17A2B8");
-      $("#options_income_range").attr("value", "false");
-      $("#options_income_range>input").css("background-color", "white");
-      $("#options_income_range>input").css("color", "black");
-      $("#options_income_range").css("background-color", "transparent");
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 性别/***************************************************************************** */
-  $("#options_gender_man").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_gender_woman').css('background-color', 'transparent');
-      $('#options_gender_woman').attr('value', 'false');
-      $('#options_gender_no').css('background-color', 'transparent');
-      $('#options_gender_no').attr('value', 'false');
-      range_data['性别'] = '男';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  $("#options_gender_no").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_gender_woman').css('background-color', 'transparent');
-      $('#options_gender_woman').attr('value', 'false');
-      $('#options_gender_man').css('background-color', 'transparent');
-      $('#options_gender_man').attr('value', 'false');
-      range_data['性别'] = '不限';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  $("#options_gender_woman").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_gender_man').css('background-color', 'transparent');
-      $('#options_gender_man').attr('value', 'false');
-      $('#options_gender_no').css('background-color', 'transparent');
-      $('#options_gender_no').attr('value', 'false');
-      range_data['性别'] = '女';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 文化程度/************************************************************************* */
-  $("#options_eduction_doctor").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_master").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_bachelor").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_junior").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_seniorhigh").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_juniorhigh").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_primary").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_illiteracy").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  $("#options_eduction_no").click(function (e) {
-    $("#options_education_name").text(e.target.innerHTML);
-    range_data['文化程度'] = e.target.innerHTML;
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-  // 婚姻/***************************************************************************** */
-  // 未婚
-  $("#options_marriage_lonely").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_marriage_happy').css('background-color', 'transparent');
-      $('#options_marriage_happy').attr('value', 'false');
-      $('#options_marriage_sorry').css('background-color', 'transparent');
-      $('#options_marriage_sorry').attr('value', 'false');
-      $('#options_marriage_likedead').css('background-color', 'transparent');
-      $('#options_marriage_likedead').attr('value', 'false');
-      $('#options_marriage_no').css('background-color', 'transparent');
-      $('#options_marriage_no').attr('value', 'false');
-      range_data['婚姻'] = '未婚';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 已婚
-  $("#options_marriage_happy").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_marriage_lonely').css('background-color', 'transparent');
-      $('#options_marriage_lonely').attr('value', 'false');
-      $('#options_marriage_sorry').css('background-color', 'transparent');
-      $('#options_marriage_sorry').attr('value', 'false');
-      $('#options_marriage_likedead').css('background-color', 'transparent');
-      $('#options_marriage_likedead').attr('value', 'false');
-      $('#options_marriage_no').css('background-color', 'transparent');
-      $('#options_marriage_no').attr('value', 'false');
-      range_data['婚姻'] = '已婚';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 离婚
-  $("#options_marriage_sorry").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_marriage_happy').css('background-color', 'transparent');
-      $('#options_marriage_happy').attr('value', 'false');
-      $('#options_marriage_lonely').css('background-color', 'transparent');
-      $('#options_marriage_lonely').attr('value', 'false');
-      $('#options_marriage_likedead').css('background-color', 'transparent');
-      $('#options_marriage_likedead').attr('value', 'false');
-      $('#options_marriage_no').css('background-color', 'transparent');
-      $('#options_marriage_no').attr('value', 'false');
-      range_data['婚姻'] = '离婚';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 丧偶
-  $("#options_marriage_likedead").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_marriage_happy').css('background-color', 'transparent');
-      $('#options_marriage_happy').attr('value', 'false');
-      $('#options_marriage_sorry').css('background-color', 'transparent');
-      $('#options_marriage_sorry').attr('value', 'false');
-      $('#options_marriage_lonely').css('background-color', 'transparent');
-      $('#options_marriage_lonely').attr('value', 'false');
-      $('#options_marriage_no').css('background-color', 'transparent');
-      $('#options_marriage_no').attr('value', 'false');
-      range_data['婚姻'] = '丧偶';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-  // 不限
-  $("#options_marriage_no").click(function () {
-    if ($(this).attr('value') == 'false') {
-      $(this).css('background-color', '#17A2B8');
-      $(this).attr('value', 'true');
-      $('#options_marriage_happy').css('background-color', 'transparent');
-      $('#options_marriage_happy').attr('value', 'false');
-      $('#options_marriage_sorry').css('background-color', 'transparent');
-      $('#options_marriage_sorry').attr('value', 'false');
-      $('#options_marriage_likedead').css('background-color', 'transparent');
-      $('#options_marriage_likedead').attr('value', 'false');
-      $('#options_marriage_lonely').css('background-color', 'transparent');
-      $('#options_marriage_lonely').attr('value', 'false');
-      range_data['婚姻'] = '不限';
-      getData(id);
-      drawRadar();
-      drawBar();
-    }
-  });
-
-  // 职业/************************************************ */
-  range_data['职业'] = ['不限', '不限'];
-  $('#job_bigjob').empty();
-  for (var bigjob_code in classificationOfOccupations[86]) {
-
-    str = '<a class="dropdown-item font-small9" id="zy' + bigjob_code + '">' + classificationOfOccupations[86][bigjob_code] + '</a>'
-    $('#job_bigjob').append(str);
-    // 大类的点击
-    $('#zy' + bigjob_code).click(function (e) {
-      range_data['职业'][0] = e.target.innerHTML;
-      range_data['职业'][1] = '不限';
-      var bigjob_str = e.target.innerHTML;
-      if (bigjob_str.length > 12) {
-        bigjob_str = bigjob_str.substring(0, 12) + '…';
-      }
-      $('#bigjob_name').text(bigjob_str);
-      $('#smalljob_name').text('不限');
-      var bigjob_code2 = e.target.id.substring(2);
-      // 初始化小类菜单
-      $('#job_smalljob').empty();
-      for (smalljob_code in classificationOfOccupations[bigjob_code2]) {
-        var smalljob_str = '<a class="dropdown-item font-small9" id="zy' + smalljob_code + '">' + classificationOfOccupations[bigjob_code2][smalljob_code] + '</a>';
-        $('#job_smalljob').append(smalljob_str);
-        // 小类的点击
-        $('#zy' + smalljob_code).click(function (ee) {
-          range_data['职业'][1] = ee.target.innerHTML;
-          var smalljob_str2 = ee.target.innerHTML;
-          if (smalljob_str2.length > 12) {
-            smalljob_str2 = smalljob_str2.substring(0, 12) + '…';
-          }
-
-          $('#smalljob_name').text(smalljob_str2);
-          getData(id);
-          drawRadar();
-          drawBar();
-        });
-      }
-      $('#job_smalljob').append('<div class="dropdown-divider"></div>');
-      $('#job_smalljob').append('<a class="dropdown-item font-small9" id="smalljob_no">不限</a>');
-      $('#smalljob_no').click(function () {
-        range_data['职业'][1] = '不限';
-        $('#smalljob_name').text('不限');
-        getData(id);
-        drawRadar();
-        drawBar();
-      });
-      // 初始化小类菜单结束
-      // 重新获取数据并画图
-      getData(id);
-      drawRadar();
-      drawBar();
-    });
-
-  }
-  $('#job_bigjob').append('<div class="dropdown-divider"></div>');
-  $('#job_bigjob').append('<a class="dropdown-item font-small9" id="bigjob_no">不限</a>');
-  $('#bigjob_no').click(function () {
-    range_data['职业'][0] = '不限';
-    range_data['职业'][1] = '不限';
-    $('#job_smalljob').empty();
-    $('#bigjob_name').text('不限');
-    $('#smalljob_name').text('不限');
-    getData(id);
-    drawRadar();
-    drawBar();
-  });
-}
-function show_time() {
-  var myDate = new Date;
-  var year = myDate.getFullYear(); //获取当前年
-  var mon = myDate.getMonth() + 1; //获取当前月
-  var date = myDate.getDate(); //获取当前日
-  // var h = myDate.getHours();//获取当前小时数(0-23)
-  // var m = myDate.getMinutes();//获取当前分钟数(0-59)
-  // var s = myDate.getSeconds();//获取当前秒
-  var week = myDate.getDay();
-  var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-  var time_str = year + "-" + mon + "-" + date + " " + weeks[week];
-  $("#now_time").append('<span class="iconfont icon-riqi font-big1_5"></span>');
-  $("#now_time").append('<div>'+time_str+'</div>');
-}
-function show_something(){
+function show_something() {
   $("#total_health_con").show();
-  $("#second_row_options").show();
+
 }
 //绘制整个页面
 function drawHtml(id) {
@@ -955,6 +1083,6 @@ function drawHtml(id) {
   drawBar();
   handle_options(id);
   // $('#test').text(ChineseDistricts[86][370000]);
- 
+
 
 }
