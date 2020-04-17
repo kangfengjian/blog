@@ -1,5 +1,5 @@
 var personal_data;//全局变量，对象，用来存储一个人的各项数据
-var category = ['总体', '心脑血管', '心脏', '大脑', '代谢', '肾', '血压',];
+var category = ['总体', '血压', '心脏', '大脑', '代谢', '胃', '肺',];
 var radar_data;//雷达图的数据
 var bar_data;//柱状图的数据
 radar_data = {
@@ -113,13 +113,16 @@ $(document).ready(function () {
 function loadById(id) {
   showTime();
   drawPersonInfo(id);
-  showOptions();
+  showOptions(id);
+  getDataCharts(id);
+  drawRadar();
+  drawBar();
+  showEvaluate(id);
   // drawCureProcess(id);
   // drawTotalHealthIndex(id);
   // drawParts(id);
   // drawDiseaseTendency(id);
-  // getDataCharts(id);
-    
+
   // }
   // $("#test2020").text(s);
   // // var myDate = ;
@@ -129,7 +132,11 @@ function loadById(id) {
 function loadByNoId() {
   showTime();
   searchDiv();
-  showOptions();
+  showOptions('no_id');
+  getDataCharts('no_id');
+  drawRadar();
+  drawBar();
+  showEvaluate('no_id');
   // drawCureProcess('no_id');
   // drawTotalHealthIndex('no_id');
   // drawParts('no_id');
@@ -224,7 +231,7 @@ function get_person_brief_info_by_name_from_js(name) {
   }
   return ar;
 }
-function showOptions() {
+function showOptions(id) {
   $("#second_row_options").show();
   listen_age();
   listen_gender();
@@ -233,7 +240,7 @@ function showOptions() {
   listen_income();
   listen_marriage();
   listen_region();
-  listen_submit();
+  listen_submit(id);
 }
 function listen_age() {
   // 鼠标移入范围
@@ -644,12 +651,15 @@ function listen_region() {
     // drawBar();
   });
 }
-function listen_submit() {
+function listen_submit(id) {
   $('#options_submit').click(function () {
     for (i in options) {
       options[i] = options_temp[i];
     }
-    drawtu();
+    getDataCharts('no_id');
+    drawRadar();
+    drawBar();
+    showEvaluate(id);
     // var s = ''
     // for (i in options) {
     //   s += i + ':';
@@ -682,15 +692,34 @@ function getDataCharts(id) {
     }
     parts.push(i);
   }
+  data_charts['总体'] = {};
+  data_charts['总体']['common'] = 60;
+  data_charts['总体']['good'] = 80;
+  data_charts['总体']['score'] = data_person[id]['总体得分'];
+  data_charts['总体']['average'] = data_person[id]['总体得分'];
+  data_charts['总体']['good_num'] = 0;
+  data_charts['总体']['common_num'] = 0;
+  data_charts['总体']['danger_num'] = 0;
+  data_charts['总体']['myrank'] = 1;
+  if (data_person[id]['总体得分'] >= data_charts['总体']['good']) {
+    data_charts['总体']['good_num'] += 1;
+  }
+  else if (data_person[id]['总体得分'] >= data_charts['总体']['common']) {
+    data_charts['总体']['common_num'] += 1;
+  }
+  else {
+    data_charts['总体']['danger_num'] += 1;
+  }
+  parts.push('总体');
   for (i in data_person) {
     if (i == id) {
       continue;
     }
-    if (person_in_range(data_person[i])){
+    if (person_in_range(data_person[i])) {
       num += 1;
       for (k in parts) {
-        var j=parts[k];
-        data_charts[j]['average'] = data_charts[j]['average'] * (num - 1 / num) + data_person[i][j + '得分'] * (1 / num);
+        var j = parts[k];
+        data_charts[j]['average'] = data_charts[j]['average'] * ((num - 1) / num) + data_person[i][j + '得分'] * (1 / num);
         if (data_person[i][j + '得分'] >= data_charts[j]['good']) {
           data_charts[j]['good_num'] += 1;
         }
@@ -706,7 +735,7 @@ function getDataCharts(id) {
       }
     }
   }
-  data_charts['num']=num;
+  data_charts['num'] = num;
 }
 function person_in_range(p) {
   // alert(p['姓名']);
@@ -731,34 +760,14 @@ function person_in_range(p) {
   if (options['职业'].split(',')[1] != '不限' && options['职业'].split(',')[1] != p['工作'].split(',')[1]) {
     return false;
   }
-  if (options['地区'].split(',')[0] != '不限' && options['现居地'].split(',')[0] != p['工作'].split(',')[0]) {
+  if (options['地区'].split(',')[0] != '不限' && options['地区'].split(',')[0] != p['现居地'].split(',')[0]) {
     return false;
   }
-  if (options['地区'].split(',')[1] != '不限' && options['现居地'].split(',')[1] != p['工作'].split(',')[1]) {
+  if (options['地区'].split(',')[1] != '不限' && options['地区'].split(',')[1] != p['现居地'].split(',')[1]) {
     return false;
   }
-  
+
   return true;
-}
-
-function drawtu(){
-  getDataCharts(id);
-  var s = data_person[0]['姓名'];
-  for (i in data_charts){
-    s+=i+':';
-    s+=data_charts[i];
-    // for(j in data_charts[i]){
-    //   s+=j+',';
-    //   s+=data_charts[i][j]+';';
-
-    // }
-    
-    
-  }
-  $("#test2020").text(s);
-  // var myDate = ;
-  // var year = myDate; //获取当前年
-  alert("sfa");
 }
 
 
@@ -769,7 +778,7 @@ function drawRadar() {
   radar_option = null;
   radar_option = {
     title: {
-      text: '多部位情况',
+      text: '各部分情况',
       top: 'top',
       textStyle: {
         color: 'white',
@@ -782,7 +791,7 @@ function drawRadar() {
     color: ['#28A745', '#007BFF', '#DC3545', '#FFC107'],
     legend: {
       x: 'right',
-      data: ['理想值', '平均值', '警戒值', '当前值'],
+      data: ['良好值', '平均值', '正常值', '当前值'],
       textStyle: {
         color: 'white',
       },
@@ -815,15 +824,15 @@ function drawRadar() {
         itemStyle: { normal: { areaStyle: { type: 'default' } } },
         data: [
           {
-            name: '理想值',
+            name: '良好值',
             value: [
-              radar_data['总体']['理想值'],
-              radar_data['心脑血管']['理想值'],
-              radar_data['大脑']['理想值'],
-              radar_data['心脏']['理想值'],
-              radar_data['代谢']['理想值'],
-              radar_data['肾']['理想值'],
-              radar_data['血压']['理想值'],
+              data_charts[category[0]]['good'],
+              data_charts[category[1]]['good'],
+              data_charts[category[2]]['good'],
+              data_charts[category[3]]['good'],
+              data_charts[category[4]]['good'],
+              data_charts[category[5]]['good'],
+              data_charts[category[6]]['good'],
             ],
             symbol: 'none',
             areaStyle: {
@@ -836,13 +845,13 @@ function drawRadar() {
           {
             name: '平均值',
             value: [
-              radar_data['总体']['平均值'],
-              radar_data['心脑血管']['平均值'],
-              radar_data['大脑']['平均值'],
-              radar_data['心脏']['平均值'],
-              radar_data['代谢']['平均值'],
-              radar_data['肾']['平均值'],
-              radar_data['血压']['平均值'],
+              data_charts[category[0]]['average'],
+              data_charts[category[1]]['average'],
+              data_charts[category[2]]['average'],
+              data_charts[category[3]]['average'],
+              data_charts[category[4]]['average'],
+              data_charts[category[5]]['average'],
+              data_charts[category[6]]['average'],
             ],
             symbol: 'none',
             areaStyle: {
@@ -853,15 +862,15 @@ function drawRadar() {
             },
           },
           {
-            name: '警戒值',
+            name: '正常值',
             value: [
-              radar_data['总体']['警戒值'],
-              radar_data['心脑血管']['警戒值'],
-              radar_data['大脑']['警戒值'],
-              radar_data['心脏']['警戒值'],
-              radar_data['代谢']['警戒值'],
-              radar_data['肾']['警戒值'],
-              radar_data['血压']['警戒值'],
+              data_charts[category[0]]['common'],
+              data_charts[category[1]]['common'],
+              data_charts[category[2]]['common'],
+              data_charts[category[3]]['common'],
+              data_charts[category[4]]['common'],
+              data_charts[category[5]]['common'],
+              data_charts[category[6]]['common'],
             ],
             areaStyle: {
               color: '#DC3545',
@@ -874,13 +883,13 @@ function drawRadar() {
           {
             name: '当前值',
             value: [
-              radar_data['总体']['当前值'],
-              radar_data['心脑血管']['当前值'],
-              radar_data['大脑']['当前值'],
-              radar_data['心脏']['当前值'],
-              radar_data['代谢']['当前值'],
-              radar_data['肾']['当前值'],
-              radar_data['血压']['当前值'],
+              data_charts[category[0]]['score'],
+              data_charts[category[1]]['score'],
+              data_charts[category[2]]['score'],
+              data_charts[category[3]]['score'],
+              data_charts[category[4]]['score'],
+              data_charts[category[5]]['score'],
+              data_charts[category[6]]['score'],
             ],
             symbol: 'none',
             areaStyle: {
@@ -916,8 +925,8 @@ function drawBar() {
         type: 'shadow'
       },
       formatter: function (params) {
-        var total = bar_data[params[0].name]['良好人数'] + bar_data[params[0].name]['正常人数'] + bar_data[params[0].name]['危险人数'];
-        var me = bar_data[params[0].name]['我的排名'];
+        var total = data_charts['num'];//总体人数
+        var me = data_charts[params[0].name]['myrank'];
         var res = params[0].name + '<br>';
         res += '<span style="color:' + params[params.length - 1].color + ';font-size:1.5em;">●</span>' +
           params[params.length - 1].seriesName + '：' + me + '/' + total + '（' + (me * 100 / total).toFixed(1) + '%）<br>';
@@ -983,13 +992,13 @@ function drawBar() {
         type: 'bar',
         stack: '等级',
         data: [
-          bar_data[category[0]]['危险人数'],
-          bar_data[category[1]]['危险人数'],
-          bar_data[category[2]]['危险人数'],
-          bar_data[category[3]]['危险人数'],
-          bar_data[category[4]]['危险人数'],
-          bar_data[category[5]]['危险人数'],
-          bar_data[category[6]]['危险人数'],
+          data_charts[category[0]]['danger_num'],
+          data_charts[category[1]]['danger_num'],
+          data_charts[category[2]]['danger_num'],
+          data_charts[category[3]]['danger_num'],
+          data_charts[category[4]]['danger_num'],
+          data_charts[category[5]]['danger_num'],
+          data_charts[category[6]]['danger_num'],
         ],
 
       },
@@ -999,13 +1008,13 @@ function drawBar() {
         stack: '等级',
 
         data: [
-          bar_data[category[0]]['正常人数'],
-          bar_data[category[1]]['正常人数'],
-          bar_data[category[2]]['正常人数'],
-          bar_data[category[3]]['正常人数'],
-          bar_data[category[4]]['正常人数'],
-          bar_data[category[5]]['正常人数'],
-          bar_data[category[6]]['正常人数'],
+          data_charts[category[0]]['common_num'],
+          data_charts[category[1]]['common_num'],
+          data_charts[category[2]]['common_num'],
+          data_charts[category[3]]['common_num'],
+          data_charts[category[4]]['common_num'],
+          data_charts[category[5]]['common_num'],
+          data_charts[category[6]]['common_num'],
         ],
       },
       {
@@ -1014,13 +1023,13 @@ function drawBar() {
         stack: '等级',
 
         data: [
-          bar_data[category[0]]['良好人数'],
-          bar_data[category[1]]['良好人数'],
-          bar_data[category[2]]['良好人数'],
-          bar_data[category[3]]['良好人数'],
-          bar_data[category[4]]['良好人数'],
-          bar_data[category[5]]['良好人数'],
-          bar_data[category[6]]['良好人数'],
+          data_charts[category[0]]['good_num'],
+          data_charts[category[1]]['good_num'],
+          data_charts[category[2]]['good_num'],
+          data_charts[category[3]]['good_num'],
+          data_charts[category[4]]['good_num'],
+          data_charts[category[5]]['good_num'],
+          data_charts[category[6]]['good_num'],
         ],
       },
       {
@@ -1036,13 +1045,13 @@ function drawBar() {
             color: '#FFC107',
           },
           data: [
-            { coord: [category[0], bar_data[category[0]]['良好人数'] + bar_data[category[0]]['正常人数'] + bar_data[category[0]]['危险人数'] - bar_data[category[0]]['我的排名']] },
-            { coord: [category[1], bar_data[category[1]]['良好人数'] + bar_data[category[1]]['正常人数'] + bar_data[category[1]]['危险人数'] - bar_data[category[1]]['我的排名']] },
-            { coord: [category[2], bar_data[category[2]]['良好人数'] + bar_data[category[2]]['正常人数'] + bar_data[category[2]]['危险人数'] - bar_data[category[2]]['我的排名']] },
-            { coord: [category[3], bar_data[category[3]]['良好人数'] + bar_data[category[3]]['正常人数'] + bar_data[category[3]]['危险人数'] - bar_data[category[3]]['我的排名']] },
-            { coord: [category[4], bar_data[category[4]]['良好人数'] + bar_data[category[4]]['正常人数'] + bar_data[category[4]]['危险人数'] - bar_data[category[4]]['我的排名']] },
-            { coord: [category[5], bar_data[category[5]]['良好人数'] + bar_data[category[5]]['正常人数'] + bar_data[category[5]]['危险人数'] - bar_data[category[5]]['我的排名']] },
-            { coord: [category[6], bar_data[category[6]]['良好人数'] + bar_data[category[6]]['正常人数'] + bar_data[category[6]]['危险人数'] - bar_data[category[6]]['我的排名']] },
+            { coord: [category[0], data_charts['num'] - data_charts[category[0]]['myrank']] },
+            { coord: [category[1], data_charts['num'] - data_charts[category[1]]['myrank']] },
+            { coord: [category[2], data_charts['num'] - data_charts[category[2]]['myrank']] },
+            { coord: [category[3], data_charts['num'] - data_charts[category[3]]['myrank']] },
+            { coord: [category[4], data_charts['num'] - data_charts[category[4]]['myrank']] },
+            { coord: [category[5], data_charts['num'] - data_charts[category[5]]['myrank']] },
+            { coord: [category[6], data_charts['num'] - data_charts[category[6]]['myrank']] },
           ],
         }
       },
@@ -1052,8 +1061,153 @@ function drawBar() {
     bar.setOption(bar_option, true)
   }
 }
-function show_something() {
+function showEvaluate(id) {
   $("#total_health_con").show();
+  var str_age = '';
+  if (options['年龄'] != '不限') {
+    str_age += options['年龄'].split(',')[0] + "到" + options['年龄'].split(',')[1] + "岁的";
+  }
+  var str_income = '';
+  if (options['收入'] != '不限') {
+    str_income += '收入在' + options['收入'].split(',')[0] + "到" + options['收入'].split(',')[1] + "元范围内的";
+  }
+  var str_gender = '';
+  if (options['性别'] != '不限') {
+    str_gender += options['性别'] + '性，';
+  }
+  var str_marriage = '';
+  if (options['婚姻'] != '不限') {
+    str_marriage += options['婚姻'] + '人士，';
+  }
+  var str_greed = '';
+  if (options['学历'] != '不限') {
+    if (options['学历'] != '文盲或半文盲') {
+      str_greed += options['学历'] + '学历';
+    }
+    else {
+      str_greed += options['学历'];
+    }
+
+  }
+  var zhiye1 = options['职业'].split(',')[0];
+  var zhiye2 = options['职业'].split(',')[1];
+  var str_zhiye = '';
+  if (zhiye2 == '不限') {
+    if (zhiye1 != '不限') {
+      str_zhiye = '工作为' + zhiye1 + "的";
+    }
+  }
+  else {
+    str_zhiye = '工作为' + zhiye2 + "的";
+  }
+  var diqu1 = options['地区'].split(',')[0];
+  var diqu2 = options['地区'].split(',')[1];
+  var str_diqu = '';
+  if (diqu2 == '不限') {
+    if (diqu1 != '不限') {
+      str_diqu = diqu1 + '人';
+    }
+  }
+  else {
+    str_diqu = diqu2 + '人';
+  }
+
+  var s1 = '根据所选范围，找到' + str_age + str_greed + str_gender + str_zhiye + str_income + str_marriage + str_diqu + "共" + (data_charts['num'] - 1) + '人。';
+  if (data_charts['num'] == 1) {
+    s = s1;
+  }
+  else {
+    var defen = data_person[id]['总体得分'];
+    var shuiping = "";
+    if (defen >= 80) {
+      shuiping += "良好";
+    }
+    else if (defen >= 60) {
+      shuiping += "正常";
+    }
+    else {
+      shuiping = "危险";
+    }
+    var bijiao = "";
+    if (defen > data_charts['总体']['average']) {
+      bijiao = '高';
+    }
+    else if (defen < data_charts['总体']['average']) {
+      bijiao = '低';
+    }
+    else {
+      bijiao = "等";
+    }
+    var s2 = '您的总体健康水平得分为' + data_person[id]['总体得分'] + '，处于' + shuiping + '水平，' + bijiao + '于所选人群平均分(';
+    s2 += data_charts['总体']['average'].toFixed(2) + '分)，高于' + (((data_charts['num'] - data_charts['总体']['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。'
+    var s3 = '您的';
+    var lianghao = '';
+    var zhengchang = '';
+    var weixian = '';
+    var zuiyou = '血压';
+    var zuidi = '血压';
+    for (j in category) {
+      i = category[j];
+      if (i == '总体') {
+        continue;
+      }
+      if (data_person[id][i + '得分'] >= 80) {
+        lianghao += i + '、';
+      }
+      else if (data_person[id][i + '得分'] >= 60) {
+        zhengchang += i + '、';
+      }
+      else {
+        weixian += i + '、';
+      }
+      if (data_person[id][i + '得分'] > data_person[id][zuiyou + '得分']) {
+        zuiyou = i;
+      }
+      if (data_person[id][i + '得分'] < data_person[id][zuidi + '得分']) {
+        zuidi = i;
+      }
+    }
+
+    if (lianghao == '') {
+      s3 += zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[zuiyou]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+    else if (lianghao.substring(0, lianghao.length - 1).indexOf('、') == -1) {
+      lianghao = lianghao.substring(0, lianghao.length - 1);
+      s3 += lianghao + '状况良好，得分' + data_person[id][lianghao + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[lianghao]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+    else {
+      lianghao = lianghao.substring(0, lianghao.length - 1);
+      var houweizhi = lianghao.lastIndexOf('、');
+      lianghao = lianghao.substring(0, houweizhi) + '和' + lianghao.substring(houweizhi + 1);
+      s3 += lianghao + '状况良好，其中' + zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[zuiyou]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+    var s4 = '您的';
+    if (weixian == '') {
+      s4 += zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，高于所选人群中' + (((data_charts['num'] - data_charts[zuidi]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+    else if (weixian.substring(0, weixian.length - 1).indexOf('、') == -1) {
+      weixian = weixian.substring(0, weixian.length - 1);
+      s4 += weixian + '状况较差，处于危险水平，得分' + data_person[id][weixian + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num'] - data_charts[weixian]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+    else {
+      weixian = weixian.substring(0, weixian.length - 1);
+      var houweizhi = weixian.lastIndexOf('、');
+      weixian = weixian.substring(0, houweizhi) + '和' + weixian.substring(houweizhi + 1);
+      s4 += weixian + '状况较差，处于危险水平，其中' + zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num'] - data_charts[zuidi]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+    }
+  }
+  // s3="您的血压和大脑状况良好，处于良好水平，其中血压得分58分，是所有大项中得分最高的，高于所选人群中80%的人，。<br>";
+  // s4 = "您的胃大项状况较差，处于危险水平，得分55分，是所有大项中得分最低的，仅高于所选人群中20%的人。";
+  $("#evaluate_con").html(s1 + s2 + s3 + s4);
+  // $("#test2020").text(data_charts['血压']['average']);
+}
+
+
+
+
+
+function show_something() {
+
 
 }
 //绘制整个页面

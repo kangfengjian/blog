@@ -83,35 +83,20 @@
         </div>
       </div>
       <!-- 第二列 -->
-      <div class="col-lg-4 d-none d-lg-block fill-h no-margin-h">
-        <div class="row h-100" id="total_health_con" style="display:none;">
-          <div class="col-4 no-padding justify-content-end d-flex align-items-center">
-            <span class="iconfont icon-renti font-big5 text-success no-padding"></span>
-          </div>
-          <div class="col-8 h-100">
-            <div class="row h-60 no-padding">
-              <div class="col-12 justify-content-start d-flex align-items-end pl-2">
-                <span class="font-big2_5 font-weight-bold text-success no-padding" id='total_health_index'></span>
-              </div>
-            </div>
-            <div class="row h-40 no-padding">
-              <div class="col-12 justify-content-start d-flex align-items-start pl-2">
-                <span class="font-big1_5 text-muted">总体健康指数</span>
-              </div>
-            </div>
+      <div class="col-lg-8 d-none d-lg-block fill-h no-margin-h">
+        <div class="row h-30 d-none d-lg-block">
+          <div class="col-12 pr-4 pd-2 d-flex justify-content-end align-items-center" id="now_time">
           </div>
         </div>
-      </div>
-      <!-- 第三列 -->
-      <div class="col-lg-4 fill-h no-margin-h">
-        <div class="container-fluid h-100">
-          <div class="row h-50 d-none d-lg-block">
-            <div class="col-12 pr-2 pb-3 d-flex justify-content-end align-items-center" id="now_time">
+        <div class="row h-70 justify-content-center" id="total_health_con" style="display:none;">
+          <div class="col-10 h-100">
+            <div class="row h-100 no-padding" style="font-size:90%" id="evaluate_con">
               
             </div>
           </div>
         </div>
       </div>
+
     </div>
     <!-- 第二行 -->
     <div class="row h-process bg08">
@@ -299,7 +284,8 @@
               <!-- 提交设置 -->
               <div class="row h-10">
                 <div class="col d-flex justify-content-center align-items-center pr-0">
-                  <button id="options_submit" type="button" class="btn btn-sm btn-primary text-white">&nbsp;&nbsp;提&nbsp;交&nbsp;设&nbsp;置&nbsp;&nbsp;</button>
+                  <button id="options_submit" type="button"
+                    class="btn btn-sm btn-primary text-white">&nbsp;&nbsp;提&nbsp;交&nbsp;设&nbsp;置&nbsp;&nbsp;</button>
                 </div>
               </div>
             </div>
@@ -333,7 +319,6 @@
   <script src='js/ChineseDistricts.js'></script>
   <script src='js/classificationOfOccupations.js'></script>
   <script>document.write('<script src="js/group.js?time=' + new Date().getTime() + '"><\/script>');</script>
-  <div id="test2020">test</div>
 </body>
 
 </html>
