@@ -46,7 +46,7 @@
                 <div class="row h-50 px-2 d-flex justify-content-center align-items-center" id="search_div"
                   style="display:none !important;">
                   <div class="input-group mb-0">
-                    <input type="text" class="form-control" placeholder="输入编号（0-999）或姓名搜索"
+                    <input type="text" class="form-control" placeholder="输入编号（0-1999）或姓名搜索"
                       aria-label="Recipient's username" aria-describedby="basic-addon2" id="search_input">
                     <div class="input-group-append" id="search_button" style="cursor:pointer;">
                       <span class="iconfont icon-htmal5icon25 input-group-text rounded-right"></span>
@@ -78,20 +78,17 @@
         </div>
       </div>
       <!-- 第二列 -->
-      <div class="col-lg-8 d-none d-lg-block fill-h no-margin-h">
-        <div class="row h-30 d-none d-lg-block">
+      <div class="col-lg-8 col-sm-12 d-lg-block fill-h no-margin-h d-none">
+        <div class="row h-30  d-lg-block">
           <div class="col-12 pr-4 pd-2 d-flex justify-content-end align-items-center" id="now_time">
           </div>
         </div>
-        <div class="row h-70 justify-content-center" id="total_health_con" style="display:none;">
+        <div class="row h-70 justify-content-center" id="total_health_con" >
           <div class="col-10 h-100">
-            <div class="row h-100 no-padding" style="font-size:90%" id="evaluate_con">
-
-            </div>
+            <div class="row h-100" style="font-size:90%" id="evaluate_con"></div>
           </div>
         </div>
       </div>
-
     </div>
     <!-- 第二行 -->
     <div class="row h-process bg08">
@@ -314,7 +311,7 @@
   <script src="js/echarts.min.js"></script>
   <!-- 引入自定义js文件 -->
   <script src='data/data_part.js'></script>
-  <script src='data/data_person1000.js'></script>
+  <script src='data/data_person.js'></script>
   <script src='js/ChineseDistricts.js'></script>
   <script src='js/classificationOfOccupations.js'></script>
   <script>document.write('<script src="js/group.js?time=' + new Date().getTime() + '"><\/script>');</script>

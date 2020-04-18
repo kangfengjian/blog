@@ -44,7 +44,7 @@
                 <div class="row h-50 px-2 d-flex justify-content-center align-items-center" id="search_div"
                   style="display:none !important;">
                   <div class="input-group mb-0">
-                    <input type="text" class="form-control" placeholder="输入编号（0-999）或姓名搜索"
+                    <input type="text" class="form-control" placeholder="输入编号（0-1999）或姓名搜索"
                       aria-label="Recipient's username" aria-describedby="basic-addon2" id="search_input">
                     <div class="input-group-append" id="search_button" style="cursor:pointer;">
                       <span class="iconfont icon-htmal5icon25 input-group-text rounded-right"></span>
@@ -197,8 +197,8 @@
                   <tr>
                     <th scope="col" class="text-nowrap border-top-0 text-white">#</th>
                     <th scope="col" class="text-nowrap border-top-0 text-white">名称</th>
-                    <th scope="col" class="text-nowrap border-top-0 text-white">当前指标</th>
-                    <th scope="col" class="text-nowrap border-top-0 text-white">理想指标</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white" style="text-align:center">当前指标</th>
+                    <th scope="col" class="text-nowrap border-top-0 text-white" style="text-align:center">理想指标</th>
                   </tr>
                 </thead>
                 <tbody id="items_tbody">
@@ -214,9 +214,7 @@
       <div class="col-lg-4 fill-h no-margin-h bg08">
         <div class="container-fluid h-100">
           <div class="row h-10 d-none d-lg-block">
-            <div class="col-12 pr-2 pb-3 d-flex justify-content-end align-items-center" id="now_time">
-
-            </div>
+            <div class="col-12 pr-2 pb-3 d-flex justify-content-end align-items-center" id="now_time"></div>
           </div>
           <div class="row h-30 pb-2" id="illness1_row">
             <!-- 第一个疾病风险预测 -->
@@ -294,7 +292,7 @@
   <!-- 引入echarts文件///////////////////////////////////////////////////////////////////////////////////////// -->
   <script type="text/javascript" src="js/echarts.min.js"></script>
   <!-- 引入自定义js文件 -->
-  <script src='data/data_person1000.js'></script>
+  <script src='data/data_person.js'></script>
   <script src='data/data_part.js'></script>
   <script src='data/data_item.js'></script>
   <script>document.write('<script src="js/personal.js?time=' + new Date().getTime() + '"><\/script>');</script>

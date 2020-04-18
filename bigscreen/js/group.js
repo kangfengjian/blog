@@ -1,73 +1,5 @@
-var personal_data;//全局变量，对象，用来存储一个人的各项数据
+//全局变量
 var category = ['总体', '血压', '心脏', '大脑', '代谢', '胃', '肺',];
-var radar_data;//雷达图的数据
-var bar_data;//柱状图的数据
-radar_data = {
-  '总体': { '理想值': 80, '警戒值': 20, '平均值': 64, '当前值': 88, },
-  '心脑血管': { '理想值': 85, '警戒值': 30, '平均值': 70, '当前值': 88, },
-  '大脑': { '理想值': 79, '警戒值': 25, '平均值': 63, '当前值': 88, },
-  '心脏': { '理想值': 82, '警戒值': 20, '平均值': 72, '当前值': 55, },
-  '代谢': { '理想值': 93, '警戒值': 35, '平均值': 64, '当前值': 88, },
-  '肾': { '理想值': 98, '警戒值': 40, '平均值': 59, '当前值': 88, },
-  '血压': { '理想值': 85, '警戒值': 35, '平均值': 75, '当前值': 88, },
-};
-bar_data = {
-  '总体': { '良好人数': 102, '正常人数': 1153, '危险人数': 245, '我的排名': 100, },
-  '心脑血管': { '良好人数': 365, '正常人数': 491, '危险人数': 644, '我的排名': 542, },
-  '大脑': { '良好人数': 521, '正常人数': 633, '危险人数': 346, '我的排名': 314, },
-  '心脏': { '良好人数': 458, '正常人数': 296, '危险人数': 746, '我的排名': 347, },
-  '代谢': { '良好人数': 658, '正常人数': 695, '危险人数': 147, '我的排名': 34, },
-  '肾': { '良好人数': 841, '正常人数': 345, '危险人数': 314, '我的排名': 346, },
-  '血压': { '良好人数': 354, '正常人数': 779, '危险人数': 367, '我的排名': 347, },
-};
-var range_data = {//人群范围
-  '年龄': [0, 100],
-  '性别': '男',
-  '文化程度': '大专',
-  '职业': ['专业技术人员', '专业技术人员',],
-  '收入': [0, 100],
-  '婚姻': '未婚',
-  '地区': ['山东省', '聊城市', '茌平县',],
-};
-function getPersonalData(id) {
-  personal_data = {
-    "编号": 1,
-    "姓名": "张三",
-    "性别": "男",
-    "生日": "1995-10-05",
-    "籍贯": "山东省聊城市",
-    "户口所在地": "山东省聊城市",
-    "现居地": "山东省济南市",
-    "民族": "汉族",
-    "工作": "学生",
-    "文化程度": "本科",
-    "收入": "500",
-    "婚姻状况": "未婚",
-    "就诊经历": ["2009-7-1", "轻微鼻炎", "2019-2-1", "脚踝扭伤", '2019年2月2日', '感冒',],
-    "身高": 172,
-    "体重": 55,
-    "吸烟": "不吸烟",
-    "收缩压": 120,
-    "舒张压": 80,
-    "体质指数": 18.59,
-    "空腹血糖": 3.88,
-    "血肌酐": 100,
-    "甘油三酯": 1.56,
-    "总胆固醇": 10,
-    "高密度脂蛋白胆固醇": 1.9,
-    "低密度脂蛋白胆固醇": 3.38,
-    "白细胞计数": 3.6,
-    "红细胞计数": 3.9,
-    "淋巴细胞计数": 2.0,
-    "中性粒细胞计数": 5,
-    "红细胞比容": 40,
-    "饮酒": "不饮酒",
-    "高血压": "否",
-    "糖尿病": "否",
-    "贫血": "否",
-    "心血管疾病": "否",
-  }
-}
 var options = {
   '年龄': '不限',
   '性别': '不限',
@@ -87,7 +19,7 @@ var options_temp = {
   '地区': '不限,不限',
 };
 var data_charts = {};
-//一切从这里开始************************************************************************************************
+//一切从这里开始****************************************************************
 $(document).ready(function () {
   var str = window.location.href
   var n = str.indexOf("id=");
@@ -119,15 +51,6 @@ function loadById(id) {
   drawBar();
   showEvaluate(id);
   showWarning();
-  // drawCureProcess(id);
-  // drawTotalHealthIndex(id);
-  // drawParts(id);
-  // drawDiseaseTendency(id);
-
-  // }
-  // $("#test2020").text(s);
-  // // var myDate = ;
-  // var year = myDate; //获取当前年
 }
 //在没有id的情况下加载页面***
 function loadByNoId() {
@@ -222,7 +145,7 @@ function get_person_brief_info_by_id_from_js(id) {
   // alert(data_person[0]['姓名']);姓名、性别、生日、现居地
   // 根据id查找人并返回信息，如果查找不到则返回空集。返回结果是一个数组，数组里含有多条查找到得信息，每条数据是一个id加一个字符串
   if (id in data_person) {
-    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地']]];
+    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地'].replace(',','')]];
   }
   else {
     return [];
@@ -232,7 +155,7 @@ function get_person_brief_info_by_name_from_js(name) {
   var ar = [];
   for (key in data_person) {
     if (data_person[key]['姓名'] == name) {
-      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地']]);
+      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地'].replace(',','')]);
     }
   }
   return ar;
@@ -584,77 +507,30 @@ function listen_region() {
         $('#distract_city').append(city_str);
         // 市级的点击
         $('#dq' + city_code).click(function (ee) {
-          // range_data['地区'][1] = ee.target.innerHTML;          
           options_temp['地区'] = options_temp['地区'].substring(0, options_temp['地区'].indexOf(',')) + ',' + ee.target.innerHTML;
-          // range_data['地区'][2] = '不限';
           $('#city_name').text(ee.target.innerHTML);
-          // $('#county_name').text('不限');
           var city_code2 = ee.target.id.substring(2);
-          // 初始化县级菜单
-          // $('#distract_county').empty();
-          // for (county_code in ChineseDistricts[city_code2]) {
-          //   // $('#test').text(county_code);
-          //   county_str = '<a class="dropdown-item font-small9" id="dq' + county_code + '">' + ChineseDistricts[city_code2][county_code] + '</a>';
-          //   $('#distract_county').append(county_str);
-          //   // 县级的点击
-          //   $('#dq' + county_code).click(function (eee) {
-          //     range_data['地区'][2] = eee.target.innerHTML;
-          //     $('#county_name').text(eee.target.innerHTML);
-          //     getData(id);
-          //     drawRadar();
-          //     drawBar();
-          //   });
-          // }
-          // $('#distract_county').append('<div class="dropdown-divider"></div>');
-          // $('#distract_county').append('<a class="dropdown-item font-small9" id="county_no">不限</a>');
-          // $('#county_no').click(function () {
-          //   range_data['地区'][2] = '不限';
-          //   $('#county_name').text('不限');
-          //   getData(id);
-          //   drawRadar();
-          //   drawBar();
-          // });
-          //初始化县菜单结束
-          // getData(id);
-          // drawRadar();
-          // drawBar();
         });
       }
       $('#distract_city').append('<div class="dropdown-divider"></div>');
       $('#distract_city').append('<a class="dropdown-item font-small9" id="city_no">不限</a>');
       $('#city_no').click(function () {
-        // range_data['地区'][1] = '不限';
-        // range_data['地区'][2] = '不限';
         $('#distract_county').empty();
         $('#city_name').text('不限');
         $('#county_name').text('不限');
-        // getData(id);
-        // drawRadar();
-        // drawBar();
       });
-      // 初始化市级菜单结束
-      // 重新获取数据并画图
-      // getData(id);
-      // drawRadar();
-      // drawBar();
     });
 
   }
   $('#distract_province').append('<div class="dropdown-divider"></div>');
   $('#distract_province').append('<a class="dropdown-item font-small9" id="province_no">不限</a>');
   $('#province_no').click(function () {
-    // range_data['地区'][0] = '不限';
-    // range_data['地区'][1] = '不限';
-    // range_data['地区'][1] = '不限';
     options_temp['地区'] = '不限,不限';
     $('#distract_city').empty();
     $('#distract_county').empty();
     $('#province_name').text('不限');
     $('#city_name').text('不限');
     $('#county_name').text('不限');
-    // getData(id);
-    // drawRadar();
-    // drawBar();
   });
 }
 function listen_submit(id) {
@@ -666,12 +542,6 @@ function listen_submit(id) {
     drawRadar();
     drawBar();
     showEvaluate(id);
-    // var s = ''
-    // for (i in options) {
-    //   s += i + ':';
-    //   s += options[i] + '\n';
-    // }
-    // $("#test2020").text(s);
   });
 }
 function getDataCharts(id) {
@@ -744,7 +614,6 @@ function getDataCharts(id) {
   data_charts['num'] = num;
 }
 function person_in_range(p) {
-  // alert(p['姓名']);
   if (options['年龄'] != '不限' && (new Date().getFullYear() - parseInt(p['生日']) < parseInt(options['年龄'].split(',')[0]) || new Date().getFullYear() - parseInt(p['生日']) > parseInt(options['年龄'].split(',')[1]))) {
     return false;
   }
@@ -772,12 +641,8 @@ function person_in_range(p) {
   if (options['地区'].split(',')[1] != '不限' && options['地区'].split(',')[1] != p['现居地'].split(',')[1]) {
     return false;
   }
-
   return true;
 }
-
-
-
 // 雷达图
 function drawRadar() {
   var radar = echarts.init(document.getElementById("radar"));
@@ -944,7 +809,6 @@ function drawBar() {
       }
     },
     color: ['#C23531', '#2F4554', '#61A0AB', '#FFC107'],
-    // color: ['#28A745', '#007BFF', '#DC3545', '#FFC107'],
     legend: {
       data: [
         '良好',
@@ -1069,6 +933,7 @@ function drawBar() {
     bar.setOption(bar_option, true)
   }
 }
+// 显示评价信息
 function showEvaluate(id) {
   $("#total_health_con").show();
   var str_age = '';
@@ -1204,50 +1069,9 @@ function showEvaluate(id) {
       s4 += weixian + '状况较差，处于危险水平，其中' + zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num'] - data_charts[zuidi]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
     }
   }
-  // s3="您的血压和大脑状况良好，处于良好水平，其中血压得分58分，是所有大项中得分最高的，高于所选人群中80%的人，。<br>";
-  // s4 = "您的胃大项状况较差，处于危险水平，得分55分，是所有大项中得分最低的，仅高于所选人群中20%的人。";
   $("#evaluate_con").html(s1 + s2 + s3 + s4);
-  // $("#test2020").text(data_charts['血压']['average']);
 }
-
-
-
-
-
-function show_something() {
-
-
-}
-//绘制整个页面
-function drawHtml(id) {
-  $('#a_personal').attr('href', 'personal_bigscreen.html?id=' + id);
-  $('#a_group').attr('href', 'group_bigscreen.html?id=' + id);
-  getPersonalData(id);
-  // 首先显示
-  show_something();
-  // 填写标题数据
-  $('#title_name').show();
-  $('#title_info').show();
-  var myDate = new Date();
-  $('#title_name_h1').text(personal_data['姓名']);
-  $('#title_info_sex').text(personal_data['性别']);
-  $('#title_info_age').text(myDate.getFullYear() - parseInt(personal_data['生日']) + '岁');
-  $('#title_info_nation').text(personal_data['民族']);
-  $('#title_info_job').text(personal_data['工作']);
-  $('#title_info_address').text(personal_data['籍贯']);
-  // 填写总体健康指数
-  $('#total_health_index').text(getTotalHealthIndex());
-  // 获取雷达图和柱状图的数据
-  getData(0);
-  // 画雷达图
-  drawRadar();
-  // 画柱状图
-  drawBar();
-  handle_options(id);
-  // $('#test').text(ChineseDistricts[86][370000]);
-
-
-}
+// 显示左下注意按钮
 function showWarning(){
   $(document).ready(function () {
     $('#zhuyi_pop').popover({
