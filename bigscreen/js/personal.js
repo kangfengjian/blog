@@ -33,6 +33,7 @@ function loadById(id) {
   drawTotalHealthIndex(id);
   drawParts(id);
   drawDiseaseTendency(id);
+  showWarning();
 }
 //在没有id的情况下加载页面***
 function loadByNoId() {
@@ -42,6 +43,7 @@ function loadByNoId() {
   drawTotalHealthIndex('no_id');
   drawParts('no_id');
   drawDiseaseTendency('no_id');
+  showWarning();
 }
 //显示搜索框***
 function searchDiv() {
@@ -101,7 +103,6 @@ function getPersonalData(id) {
       ajaxjson = result;
     }, type: 'post', async: false, data: { 'type': 2, 'id': id }
   });
-  // $("#test").text(ajaxjson);
   var obj = JSON.parse(ajaxjson);
   personal_data = obj[0];
 
@@ -119,8 +120,6 @@ function drawCureProcess(id) {
     $('#process_con').text("容器高度不足以展示图表");
     return;
   }
-
-
   var max_rows = 0;
   if (process_data.length / 2 <= parseInt((con_height + row_margin) / (row_height + row_margin))) {
     max_rows = process_data.length / 2;
@@ -128,10 +127,8 @@ function drawCureProcess(id) {
   else {
     max_rows = parseInt((con_height + row_margin) / (row_height + row_margin));
   }
-
-
   var res = "";
-  for (var i = 0, j = process_data.length; i < max_rows; i++) {
+  for (var i = 0, j = process_data.length-1; i < max_rows-1; i++) {
     if (i == 0) {
       a = 0;
     }
@@ -224,27 +221,27 @@ function drawParts(id) {
   var categories_illness = ['血压', '心脏', '大脑', '代谢', '胃', '肺',];
   // 填写大类数据
   $('#categories_div').show();
-  $('#category1_icon').html('<span style="color:#28A745;"class=" iconfont icon-zhongliuxinnaoxieguanjibing font-big1_5"></span>');
+  $('#category1_icon').html('<span class="text-success iconfont icon-ziyuan font-big1_5"></span>');
   $('#category1_text').text('血压');
   $('#category1_score').text(data_person[id]["血压得分"]);
 
-  $('#category2_icon').html('<span class="text-success iconfont icon-xinzang font-big1_5"></span>');
+  $('#category2_icon').html('<span class="text-success iconfont icon-ziyuan3 font-big1_5"></span>');
   $('#category2_text').text('心脏');
   $('#category2_score').text(data_person[id]["心脏得分"]);
 
-  $('#category3_icon').html('<span class="text-success iconfont icon-danao- font-big1_5"></span>');
+  $('#category3_icon').html('<span class="text-success iconfont icon-ziyuan2 font-big1_5"></span>');
   $('#category3_text').text('大脑');
   $('#category3_score').text(data_person[id]["大脑得分"]);
 
-  $('#category4_icon').html('<span class="text-success iconfont icon-tubiaozhizuomoban font-big1_5"></span>');
+  $('#category4_icon').html('<span class="text-success iconfont icon-daixiemianyi font-big1_5"></span>');
   $('#category4_text').text('代谢');
   $('#category4_score').text(data_person[id]["代谢得分"]);
 
-  $('#category5_icon').html('<span class="text-success iconfont icon-shenzang font-big1_5"></span>');
+  $('#category5_icon').html('<span class="text-success iconfont icon-ziyuan4 font-big1_5"></span>');
   $('#category5_text').text('胃');
   $('#category5_score').text(data_person[id]["胃得分"]);
 
-  $('#category6_icon').html('<span class="text-success iconfont icon-xieya font-big1_5"></span>');
+  $('#category6_icon').html('<span class="text-success iconfont icon-ziyuan1 font-big1_5"></span>');
   $('#category6_text').text('肺');
   $('#category6_score').text(data_person[id]["肺得分"]);
   // 生成指标列表
@@ -444,8 +441,16 @@ function drawPersonInfo(id) {
   $('#title_info_sex').text(data_person[id]['性别']);
   $('#title_info_age').text(myDate.getFullYear() - parseInt(data_person[id]['生日']) + '岁');
   $('#title_info_nation').text(data_person[id]['民族']);
-  $('#title_info_job').text(data_person[id]['工作']);
-  $('#title_info_address').text(data_person[id]['现居地']);
+  var zhiye0=data_person[id]['工作'].split(',')[0];
+  var zhiye1=data_person[id]['工作'].split(',')[1];
+  if(zhiye1=='不限'){
+    zhiye=zhiye0;
+  }
+  else{
+    zhiye=zhiye1;
+  }
+  $('#title_info_job').text(zhiye);
+  $('#title_info_address').text(data_person[id]['现居地'].replace(',',''));
   $('#title_name_search').click(function () {
     searchDiv();
   });
@@ -519,4 +524,13 @@ function get_part_info(id) {
     }
   }
   return part_info
+}
+function showWarning(){
+  $(document).ready(function () {
+    $('#zhuyi_pop').popover({
+      template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header text-dark"></h3><div class="popover-body"></div></div>',
+      trigger: 'hover',
+    }
+    );
+  });
 }

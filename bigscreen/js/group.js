@@ -118,6 +118,7 @@ function loadById(id) {
   drawRadar();
   drawBar();
   showEvaluate(id);
+  showWarning();
   // drawCureProcess(id);
   // drawTotalHealthIndex(id);
   // drawParts(id);
@@ -137,10 +138,7 @@ function loadByNoId() {
   drawRadar();
   drawBar();
   showEvaluate('no_id');
-  // drawCureProcess('no_id');
-  // drawTotalHealthIndex('no_id');
-  // drawParts('no_id');
-  // drawDiseaseTendency('no_id');
+  showWarning();
 }
 //时间***********
 function showTime() {
@@ -165,8 +163,16 @@ function drawPersonInfo(id) {
   $('#title_info_sex').text(data_person[id]['性别']);
   $('#title_info_age').text(myDate.getFullYear() - parseInt(data_person[id]['生日']) + '岁');
   $('#title_info_nation').text(data_person[id]['民族']);
-  $('#title_info_job').text(data_person[id]['工作']);
-  $('#title_info_address').text(data_person[id]['现居地']);
+  var zhiye0=data_person[id]['工作'].split(',')[0];
+  var zhiye1=data_person[id]['工作'].split(',')[1];
+  if(zhiye1=='不限'){
+    zhiye=zhiye0;
+  }
+  else{
+    zhiye=zhiye1;
+  }
+  $('#title_info_job').text(zhiye);
+  $('#title_info_address').text(data_person[id]['现居地'].replace(',',''));
   $('#title_name_search').click(function () {
     searchDiv();
   });
@@ -656,7 +662,7 @@ function listen_submit(id) {
     for (i in options) {
       options[i] = options_temp[i];
     }
-    getDataCharts('no_id');
+    getDataCharts(id);
     drawRadar();
     drawBar();
     showEvaluate(id);
@@ -712,7 +718,7 @@ function getDataCharts(id) {
   }
   parts.push('总体');
   for (i in data_person) {
-    if (i == id) {
+    if (i == id || i =='no_id') {
       continue;
     }
     if (person_in_range(data_person[i])) {
@@ -925,11 +931,11 @@ function drawBar() {
         type: 'shadow'
       },
       formatter: function (params) {
-        var total = data_charts['num'];//总体人数
+        var total = data_charts['num']-1;//总体人数
         var me = data_charts[params[0].name]['myrank'];
         var res = params[0].name + '<br>';
         res += '<span style="color:' + params[params.length - 1].color + ';font-size:1.5em;">●</span>' +
-          params[params.length - 1].seriesName + '：' + me + '/' + total + '（' + (me * 100 / total).toFixed(1) + '%）<br>';
+          params[params.length - 1].seriesName + '：' + me + '/' + total + '（' + ((total-me) * 100 / total).toFixed(2) + '%）<br>';
         for (var i = params.length - 2; i >= 0; i--) {
           res += '<span style="color:' + params[i].color + ';font-size:1.5em;">●</span>' +
             params[i].seriesName + '：' + params[i].data + '<br>';
@@ -1043,6 +1049,7 @@ function drawBar() {
           symbolSize: 8,
           itemStyle: {
             color: '#FFC107',
+            normal: {label : {show: false}}
           },
           data: [
             { coord: [category[0], data_charts['num'] - data_charts[category[0]]['myrank']] },
@@ -1054,6 +1061,7 @@ function drawBar() {
             { coord: [category[6], data_charts['num'] - data_charts[category[6]]['myrank']] },
           ],
         }
+        
       },
     ]
   };
@@ -1112,7 +1120,7 @@ function showEvaluate(id) {
     str_diqu = diqu2 + '人';
   }
 
-  var s1 = '根据所选范围，找到' + str_age + str_greed + str_gender + str_zhiye + str_income + str_marriage + str_diqu + "共" + (data_charts['num'] - 1) + '人。';
+  var s1 = '系统中'+str_age + str_greed + str_gender + str_zhiye + str_income + str_marriage + str_diqu + "共" + (data_charts['num'] - 1) + '人。';
   if (data_charts['num'] == 1) {
     s = s1;
   }
@@ -1239,4 +1247,13 @@ function drawHtml(id) {
   // $('#test').text(ChineseDistricts[86][370000]);
 
 
+}
+function showWarning(){
+  $(document).ready(function () {
+    $('#zhuyi_pop').popover({
+      template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header text-dark"></h3><div class="popover-body"></div></div>',
+      trigger: 'hover',
+    }
+    );
+  });
 }
