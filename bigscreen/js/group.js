@@ -86,16 +86,16 @@ function drawPersonInfo(id) {
   $('#title_info_sex').text(data_person[id]['性别']);
   $('#title_info_age').text(myDate.getFullYear() - parseInt(data_person[id]['生日']) + '岁');
   $('#title_info_nation').text(data_person[id]['民族']);
-  var zhiye0=data_person[id]['工作'].split(',')[0];
-  var zhiye1=data_person[id]['工作'].split(',')[1];
-  if(zhiye1=='不限'){
-    zhiye=zhiye0;
+  var zhiye0 = data_person[id]['工作'].split(',')[0];
+  var zhiye1 = data_person[id]['工作'].split(',')[1];
+  if (zhiye1 == '不限') {
+    zhiye = zhiye0;
   }
-  else{
-    zhiye=zhiye1;
+  else {
+    zhiye = zhiye1;
   }
   $('#title_info_job').text(zhiye);
-  $('#title_info_address').text(data_person[id]['现居地'].replace(',',''));
+  $('#title_info_address').text(data_person[id]['现居地'].replace(',', ''));
   $('#title_name_search').click(function () {
     searchDiv();
   });
@@ -145,7 +145,7 @@ function get_person_brief_info_by_id_from_js(id) {
   // alert(data_person[0]['姓名']);姓名、性别、生日、现居地
   // 根据id查找人并返回信息，如果查找不到则返回空集。返回结果是一个数组，数组里含有多条查找到得信息，每条数据是一个id加一个字符串
   if (id in data_person) {
-    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地'].replace(',','')]];
+    return [[id, data_person[id]['姓名'] + ' ' + data_person[id]['性别'] + ' ' + data_person[id]['生日'] + ' ' + data_person[id]['现居地'].replace(',', '')]];
   }
   else {
     return [];
@@ -155,7 +155,7 @@ function get_person_brief_info_by_name_from_js(name) {
   var ar = [];
   for (key in data_person) {
     if (data_person[key]['姓名'] == name) {
-      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地'].replace(',','')]);
+      ar.push([key, data_person[key]['姓名'] + ' ' + data_person[key]['性别'] + ' ' + data_person[key]['生日'] + ' ' + data_person[key]['现居地'].replace(',', '')]);
     }
   }
   return ar;
@@ -515,6 +515,7 @@ function listen_region() {
       $('#distract_city').append('<div class="dropdown-divider"></div>');
       $('#distract_city').append('<a class="dropdown-item font-small9" id="city_no">不限</a>');
       $('#city_no').click(function () {
+        options_temp['地区'] = options_temp['地区'].substring(0, options_temp['地区'].indexOf(',')) + ',不限';
         $('#distract_county').empty();
         $('#city_name').text('不限');
         $('#county_name').text('不限');
@@ -546,49 +547,31 @@ function listen_submit(id) {
 }
 function getDataCharts(id) {
   var parts = [];
-  var num = 1;
+  var num = 0;
   for (i in data_part) {
     data_charts[i] = {};
     data_charts[i]['common'] = data_part[i]['common'];
     data_charts[i]['good'] = data_part[i]['good'];
     data_charts[i]['score'] = data_person[id][i + '得分'];
-    data_charts[i]['average'] = data_person[id][i + '得分'];
+    data_charts[i]['average'] = 0;
     data_charts[i]['good_num'] = 0;
     data_charts[i]['common_num'] = 0;
     data_charts[i]['danger_num'] = 0;
     data_charts[i]['myrank'] = 1;
-    if (data_person[id][i + '得分'] >= data_charts[i]['good']) {
-      data_charts[i]['good_num'] += 1;
-    }
-    else if (data_person[id][i + '得分'] >= data_charts[i]['common']) {
-      data_charts[i]['common_num'] += 1;
-    }
-    else {
-      data_charts[i]['danger_num'] += 1;
-    }
     parts.push(i);
   }
   data_charts['总体'] = {};
   data_charts['总体']['common'] = 60;
   data_charts['总体']['good'] = 80;
   data_charts['总体']['score'] = data_person[id]['总体得分'];
-  data_charts['总体']['average'] = data_person[id]['总体得分'];
+  data_charts['总体']['average'] = 0;
   data_charts['总体']['good_num'] = 0;
   data_charts['总体']['common_num'] = 0;
   data_charts['总体']['danger_num'] = 0;
   data_charts['总体']['myrank'] = 1;
-  if (data_person[id]['总体得分'] >= data_charts['总体']['good']) {
-    data_charts['总体']['good_num'] += 1;
-  }
-  else if (data_person[id]['总体得分'] >= data_charts['总体']['common']) {
-    data_charts['总体']['common_num'] += 1;
-  }
-  else {
-    data_charts['总体']['danger_num'] += 1;
-  }
   parts.push('总体');
   for (i in data_person) {
-    if (i == id || i =='no_id') {
+    if (i == 'no_id') {
       continue;
     }
     if (person_in_range(data_person[i])) {
@@ -611,7 +594,31 @@ function getDataCharts(id) {
       }
     }
   }
-  data_charts['num'] = num;
+  data_charts['num_inrange'] = num;
+  if (id == 'no_id') {
+    data_charts['num_jisuan'] = num + 1;
+  }
+  else {
+    if (!person_in_range(data_person[id])) {
+      data_charts['num_jisuan'] = num + 1
+      for (k in parts) {
+        var j = parts[k];
+        if (data_person[id][j + '得分'] >= data_charts[j]['good']) {
+          data_charts[j]['good_num'] += 1;
+        }
+        else if (data_person[id][j + '得分'] >= data_charts[j]['common']) {
+          data_charts[j]['common_num'] += 1;
+        }
+        else {
+          data_charts[j]['danger_num'] += 1;
+        }
+      }
+    }
+    else {
+      data_charts['num_jisuan'] = num;
+    }
+  }
+
 }
 function person_in_range(p) {
   if (options['年龄'] != '不限' && (new Date().getFullYear() - parseInt(p['生日']) < parseInt(options['年龄'].split(',')[0]) || new Date().getFullYear() - parseInt(p['生日']) > parseInt(options['年龄'].split(',')[1]))) {
@@ -796,11 +803,11 @@ function drawBar() {
         type: 'shadow'
       },
       formatter: function (params) {
-        var total = data_charts['num']-1;//总体人数
+        var total = data_charts['num_jisuan'];//总体人数
         var me = data_charts[params[0].name]['myrank'];
         var res = params[0].name + '<br>';
         res += '<span style="color:' + params[params.length - 1].color + ';font-size:1.5em;">●</span>' +
-          params[params.length - 1].seriesName + '：' + me + '/' + total + '（' + ((total-me) * 100 / total).toFixed(2) + '%）<br>';
+          params[params.length - 1].seriesName + '：' + me + '/' + total + '（' + ((total - me) * 100 / total).toFixed(2) + '%）<br>';
         for (var i = params.length - 2; i >= 0; i--) {
           res += '<span style="color:' + params[i].color + ';font-size:1.5em;">●</span>' +
             params[i].seriesName + '：' + params[i].data + '<br>';
@@ -913,19 +920,19 @@ function drawBar() {
           symbolSize: 8,
           itemStyle: {
             color: '#FFC107',
-            normal: {label : {show: false}}
+            normal: { label: { show: false } }
           },
           data: [
-            { coord: [category[0], data_charts['num'] - data_charts[category[0]]['myrank']] },
-            { coord: [category[1], data_charts['num'] - data_charts[category[1]]['myrank']] },
-            { coord: [category[2], data_charts['num'] - data_charts[category[2]]['myrank']] },
-            { coord: [category[3], data_charts['num'] - data_charts[category[3]]['myrank']] },
-            { coord: [category[4], data_charts['num'] - data_charts[category[4]]['myrank']] },
-            { coord: [category[5], data_charts['num'] - data_charts[category[5]]['myrank']] },
-            { coord: [category[6], data_charts['num'] - data_charts[category[6]]['myrank']] },
+            { coord: [category[0], data_charts['num_jisuan'] - data_charts[category[0]]['myrank']+1] },
+            { coord: [category[1], data_charts['num_jisuan'] - data_charts[category[1]]['myrank']+1] },
+            { coord: [category[2], data_charts['num_jisuan'] - data_charts[category[2]]['myrank']+1] },
+            { coord: [category[3], data_charts['num_jisuan'] - data_charts[category[3]]['myrank']+1] },
+            { coord: [category[4], data_charts['num_jisuan'] - data_charts[category[4]]['myrank']+1] },
+            { coord: [category[5], data_charts['num_jisuan'] - data_charts[category[5]]['myrank']+1] },
+            { coord: [category[6], data_charts['num_jisuan'] - data_charts[category[6]]['myrank']+1] },
           ],
         }
-        
+
       },
     ]
   };
@@ -982,11 +989,15 @@ function showEvaluate(id) {
     }
   }
   else {
-    str_diqu = diqu2 + '人';
+    str_diqu = diqu1+diqu2 + '人';
   }
 
-  var s1 = '系统中'+str_age + str_greed + str_gender + str_zhiye + str_income + str_marriage + str_diqu + "共" + (data_charts['num'] - 1) + '人。';
-  if (data_charts['num'] == 1) {
+  var s1='';
+  var s2='';
+  var s3='';
+  var s4='';
+  s1 = '系统中' + str_age + str_greed + str_gender + str_zhiye + str_income + str_marriage + str_diqu + "共" + (data_charts['num_inrange']) + '人。';
+  if (data_charts['num_inrange'] == 0) {
     s = s1;
   }
   else {
@@ -1011,9 +1022,9 @@ function showEvaluate(id) {
     else {
       bijiao = "等";
     }
-    var s2 = '您的总体健康水平得分为' + data_person[id]['总体得分'] + '，处于' + shuiping + '水平，' + bijiao + '于所选人群平均分(';
-    s2 += data_charts['总体']['average'].toFixed(2) + '分)，高于' + (((data_charts['num'] - data_charts['总体']['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。'
-    var s3 = '您的';
+    s2 = '您的总体健康水平得分为' + data_person[id]['总体得分'] + '，处于' + shuiping + '水平，' + bijiao + '于所选人群平均分(';
+    s2 += data_charts['总体']['average'].toFixed(2) + '分)，高于' + (((data_charts['num_inrange'] - data_charts['总体']['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。'
+    s3 = '您的';
     var lianghao = '';
     var zhengchang = '';
     var weixian = '';
@@ -1042,25 +1053,25 @@ function showEvaluate(id) {
     }
 
     if (lianghao == '') {
-      s3 += zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[zuiyou]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s3 += zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num_inrange'] - data_charts[zuiyou]['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
     else if (lianghao.substring(0, lianghao.length - 1).indexOf('、') == -1) {
       lianghao = lianghao.substring(0, lianghao.length - 1);
-      s3 += lianghao + '状况良好，得分' + data_person[id][lianghao + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[lianghao]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s3 += lianghao + '状况良好，得分' + data_person[id][lianghao + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num_inrange'] - data_charts[lianghao]['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
     else {
       lianghao = lianghao.substring(0, lianghao.length - 1);
       var houweizhi = lianghao.lastIndexOf('、');
       lianghao = lianghao.substring(0, houweizhi) + '和' + lianghao.substring(houweizhi + 1);
-      s3 += lianghao + '状况良好，其中' + zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num'] - data_charts[zuiyou]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s3 += lianghao + '状况良好，其中' + zuiyou + '得分' + data_person[id][zuiyou + '得分'] + '分，是所有项目中得分最高的，高于所选人群中' + (((data_charts['num_inrange'] - data_charts[zuiyou]['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
-    var s4 = '您的';
+    s4 = '您的';
     if (weixian == '') {
-      s4 += zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，高于所选人群中' + (((data_charts['num'] - data_charts[zuidi]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s4 += zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，高于所选人群中' + (((data_charts['num_inrange'] - data_charts[zuidi]['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
     else if (weixian.substring(0, weixian.length - 1).indexOf('、') == -1) {
       weixian = weixian.substring(0, weixian.length - 1);
-      s4 += weixian + '状况较差，处于危险水平，得分' + data_person[id][weixian + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num'] - data_charts[weixian]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s4 += weixian + '状况较差，处于危险水平，得分' + data_person[id][weixian + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num_inrange'] - data_charts[weixian]['myrank'] + 1) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
     else {
       weixian = weixian.substring(0, weixian.length - 1);
@@ -1072,7 +1083,7 @@ function showEvaluate(id) {
   $("#evaluate_con").html(s1 + s2 + s3 + s4);
 }
 // 显示左下注意按钮
-function showWarning(){
+function showWarning() {
   $(document).ready(function () {
     $('#zhuyi_pop').popover({
       template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header text-dark"></h3><div class="popover-body"></div></div>',
