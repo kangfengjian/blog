@@ -1077,7 +1077,7 @@ function showEvaluate(id) {
       weixian = weixian.substring(0, weixian.length - 1);
       var houweizhi = weixian.lastIndexOf('、');
       weixian = weixian.substring(0, houweizhi) + '和' + weixian.substring(houweizhi + 1);
-      s4 += weixian + '状况较差，处于危险水平，其中' + zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num'] - data_charts[zuidi]['myrank']) / data_charts['num'] * 100).toFixed(2)) + '%的人。';
+      s4 += weixian + '状况较差，处于危险水平，其中' + zuidi + '得分' + data_person[id][zuidi + '得分'] + '分，是所有项目中得分最低的，仅高于所选人群中' + (((data_charts['num_inrange'] - data_charts[zuidi]['myrank']) / data_charts['num_inrange'] * 100).toFixed(2)) + '%的人。';
     }
   }
   $("#evaluate_con").html(s1 + s2 + s3 + s4);
