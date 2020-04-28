@@ -33,10 +33,6 @@
             color: white;
         }
 
-        button:hover {
-            cursor: text;
-        }
-
         /* 正在被点击的链接 */
     </style>
 </head>
@@ -71,7 +67,11 @@
         $(document).ready(function () {
             $("#guosou_button").mouseenter(function () {
                 if ($("#myinput").val() != '') {
-                    $("#guosou_a").attr("href", $("#guosou_a").attr("href") + "search/pagesearch.htm?q=" + $("#myinput").val());
+                    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                        $("#guosou_a").attr("href", "http://m.chinaso.com/page/search.htm?keys=" + $("#myinput").val());
+                    } else {
+                        $("#guosou_a").attr("href", $("#guosou_a").attr("href") + "search/pagesearch.htm?q=" + $("#myinput").val());
+                    }
                 }
             });
         });
