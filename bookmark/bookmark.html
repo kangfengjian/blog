@@ -47,6 +47,14 @@
     body {
       height: 100%;
     }
+
+    .copyRight {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: smaller;
+      cursor:default;
+    }
   </style>
 </head>
 
@@ -55,46 +63,47 @@
   <div class="container-fluid pt-2">
     <div class="row align-items-center">
       <div class="col-lg-4 col-12 justify-content-center d-flex">
-        <input id="myinput" class="form-control form-control-sm m-2" type="text" placeholder="">
+        <input id="myinput" class="form-control form-control-sm m-1" type="text" placeholder="">
       </div>
       <div class="col-lg-8 col-12 justify-content-start d-flex flex-wrap">
-        <button id="guosou_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="guosou_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="guosou_a" href="http://www.chinaso.com/">国搜</a>
         </button>
-        <button id="baidu_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="baidu_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="baidu_a" href="https://www.baidu.com/">百度</a>
         </button>
-        <button id="google_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="google_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="google_a" href="https://www.baidu.com/">谷歌</a>
         </button>
-        <button id="doge_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="doge_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="doge_a" href="https://www.baidu.com/">多吉</a>
         </button>
-        <button id="bing_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="bing_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="bing_a" href="https://www.baidu.com/">必应</a>
         </button>
-        <button id="zhihu_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="zhihu_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="zhihu_a" href="https://www.baidu.com/">知乎</a>
         </button>
-        <button id="sougouweixin_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2"
-          style="cursor: default;">
+        <button id="sougouweixin_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="sougouweixin_a" href="https://www.baidu.com/">搜狗|微信</a>
         </button>
-        <button id="shenma_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="shenma_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="shenma_a" href="https://www.baidu.com/">神马</a>
         </button>
-        <button id="toutiaosousuo_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2"
-          style="cursor: default;">
+        <button id="toutiaosousuo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="toutiaosousuo_a" href="https://www.baidu.com/">头条搜索</a>
         </button>
-        <button id="weibo_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="weibo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="weibo_a" href="https://www.baidu.com/">微博</a>
         </button>
-        <button id="douban_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+        <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="douban_a" href="https://www.baidu.com/">豆瓣</a>
         </button>
       </div>
     </div>
+  </div>
+  <div id="copy_right" class="copyRight zindex-tooltip text-light">
+    <a id="copy_right_a" href="" style="cursor:default;"></a>
   </div>
   <!-- <img src="1.jpg" class="img-fluid" alt="Responsive image"> -->
   <!-- Optional JavaScript -->
@@ -143,6 +152,8 @@
           "background-origin": "content-box",
           "background-clip": "content-box",
         });
+        $("#copy_right_a").text(data['bing']['copyright']);
+        $("#copy_right_a").attr('href',data['bing']['url']);
         // console.log(data);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
