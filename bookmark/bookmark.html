@@ -34,49 +34,124 @@
     }
 
     /* 正在被点击的链接 */
+    .bg {
+      background: url("");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-origin: content-box;
+      background-clip: content-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
   </style>
 </head>
 
 
-<body>
-  <div class="container-fluid">
-    <div class="row mt-2">
+<body class="bg">
+  <div class="container-fluid pt-2">
+    <div class="row align-items-center">
       <div class="col-lg-4 col-12 justify-content-center d-flex">
         <input id="myinput" class="form-control form-control-sm m-2" type="text" placeholder="">
       </div>
       <div class="col-lg-8 col-12 justify-content-start d-flex flex-wrap">
-        <button id="guosou_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2"
-          style="cursor: default;">
+        <button id="guosou_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
           <a id="guosou_a" href="http://www.chinaso.com/">国搜</a>
         </button>
-        <button id="duoji" type="button" class="btn btn-secondary btn-sm mr-2 m-2">多吉</button>
-        <button id="biying" type="button" class="btn btn-secondary btn-sm mr-2 m-2">必应</button>
-        <button id="zhihu" type="button" class="btn btn-secondary btn-sm mr-2 m-2">知乎</button>
-        <button id="sougouweixin" type="button" class="btn btn-secondary btn-sm mr-2 m-2">搜狗微信</button>
-        <button id="shenma" type="button" class="btn btn-secondary btn-sm mr-2 m-2">神马</button>
-        <button id="toutiaosousuo" type="button" class="btn btn-secondary btn-sm mr-2 m-2">头条搜索</button>
-        <button id="weibo" type="button" class="btn btn-secondary btn-sm mr-2 m-2">微博</button>
-        <button id="weibo" type="button" class="btn btn-secondary btn-sm mr-2 m-2">豆瓣</button>
+        <button id="baidu_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="baidu_a" href="https://www.baidu.com/">百度</a>
+        </button>
+        <button id="google_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="google_a" href="https://www.baidu.com/">谷歌</a>
+        </button>
+        <button id="doge_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="doge_a" href="https://www.baidu.com/">多吉</a>
+        </button>
+        <button id="bing_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="bing_a" href="https://www.baidu.com/">必应</a>
+        </button>
+        <button id="zhihu_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="zhihu_a" href="https://www.baidu.com/">知乎</a>
+        </button>
+        <button id="sougouweixin_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2"
+          style="cursor: default;">
+          <a id="sougouweixin_a" href="https://www.baidu.com/">搜狗|微信</a>
+        </button>
+        <button id="shenma_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="shenma_a" href="https://www.baidu.com/">神马</a>
+        </button>
+        <button id="toutiaosousuo_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2"
+          style="cursor: default;">
+          <a id="toutiaosousuo_a" href="https://www.baidu.com/">头条搜索</a>
+        </button>
+        <button id="weibo_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="weibo_a" href="https://www.baidu.com/">微博</a>
+        </button>
+        <button id="douban_button" type="button" class="btn btn-secondary btn-sm mr-2 m-2" style="cursor: default;">
+          <a id="douban_a" href="https://www.baidu.com/">豆瓣</a>
+        </button>
       </div>
     </div>
   </div>
+  <!-- <img src="1.jpg" class="img-fluid" alt="Responsive image"> -->
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="jquery@3.4.1/dist/jquery.slim.min.js"></script>
+  <script src="js/jquery.min.js"></script>
   <!-- <script src="popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
   <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
   <script>
+    var isMobile = false;
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+      isMobile = true;
+    }
+
     $(document).ready(function () {
+      // 国搜
       $("#guosou_button").mouseenter(function () {
         if ($("#myinput").val() != '') {
-          if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          if (isMobile) {
             $("#guosou_a").attr("href", "http://m.chinaso.com/page/search.htm?keys=" + $("#myinput").val());
           } else {
             $("#guosou_a").attr("href", "http://www.chinaso.com/search/pagesearch.htm?q=" + $("#myinput").val());
           }
         }
       });
+      // 百度
+      $("#baidu_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#baidu_a").attr("href", "https://www.baidu.com/s?wd=" + $("#myinput").val());
+        }
+      });
+
     });
+    // 获取背景图，放最后
+    $.ajax({
+      url: "https://api.no0a.cn/api/bing/0",
+      // url: "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1",必应官方接口，访问有问题
+      type: "get",
+      dataType: "json",
+      success: function (data) {
+        $("body").css({
+          "background": "url('" + data['bing']['url'] + "')",
+          "background-position": "center",
+          "background-size": "cover",
+          "background-position": "center",
+          "background-repeat": "no-repeat",
+          "background-origin": "content-box",
+          "background-clip": "content-box",
+        });
+        // console.log(data);
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        // alert(XMLHttpRequest.status);
+        // alert(XMLHttpRequest.readyState);
+        // alert(textStatus);
+      },
+    })
+
   </script>
 </body>
 
