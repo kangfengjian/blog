@@ -35,7 +35,7 @@
 
     /* 正在被点击的链接 */
     .bg {
-      background: url("");
+      background: url("https://api.dujin.org/bing/1920.php");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -53,7 +53,7 @@
       bottom: 10px;
       left: 10px;
       font-size: smaller;
-      cursor:default;
+      cursor: default;
     }
   </style>
 </head>
@@ -73,39 +73,38 @@
           <a id="baidu_a" href="https://www.baidu.com/">百度</a>
         </button>
         <button id="google_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="google_a" href="https://www.baidu.com/">谷歌</a>
+          <a id="google_a" href="https://www.google.com.hk/">谷歌</a>
         </button>
         <button id="doge_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="doge_a" href="https://www.baidu.com/">多吉</a>
+          <a id="doge_a" href="https://www.dogedoge.com/">多吉</a>
         </button>
         <button id="bing_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="bing_a" href="https://www.baidu.com/">必应</a>
+          <a id="bing_a" href="https://cn.bing.com/">必应</a>
         </button>
         <button id="zhihu_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="zhihu_a" href="https://www.baidu.com/">知乎</a>
+          <a id="zhihu_a" href="https://www.zhihu.com/">知乎</a>
         </button>
         <button id="sougouweixin_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="sougouweixin_a" href="https://www.baidu.com/">搜狗|微信</a>
+          <a id="sougouweixin_a" href="https://weixin.sogou.com/">搜狗|微信</a>
         </button>
         <button id="shenma_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="shenma_a" href="https://www.baidu.com/">神马</a>
+          <a id="shenma_a" href="https://m.sm.cn/">神马</a>
         </button>
         <button id="toutiaosousuo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="toutiaosousuo_a" href="https://www.baidu.com/">头条搜索</a>
+          <a id="toutiaosousuo_a" href="https://so.toutiao.com/">头条搜索</a>
         </button>
         <button id="weibo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="weibo_a" href="https://www.baidu.com/">微博</a>
+          <a id="weibo_a" href="https://weibo.com/">微博</a>
         </button>
         <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="douban_a" href="https://www.baidu.com/">豆瓣</a>
+          <a id="douban_a" href="https://www.douban.com/">豆瓣</a>
         </button>
       </div>
     </div>
   </div>
-  <div id="copy_right" class="copyRight zindex-tooltip text-light">
+  <!-- <div id="copy_right" class="copyRight zindex-tooltip text-light">
     <a id="copy_right_a" href="" style="cursor:default;"></a>
-  </div>
-  <!-- <img src="1.jpg" class="img-fluid" alt="Responsive image"> -->
+  </div> -->
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="js/jquery.min.js"></script>
@@ -134,35 +133,69 @@
           $("#baidu_a").attr("href", "https://www.baidu.com/s?wd=" + $("#myinput").val());
         }
       });
-
+      // 谷歌
+      $("#google_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#google_a").attr("href", "https://www.google.com.hk/search?q=" + $("#myinput").val());
+        }
+      });
+      // 多吉
+      $("#doge_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#doge_a").attr("href", "https://www.dogedoge.com/results?q=" + $("#myinput").val());
+        }
+      });
+      // 必应
+      $("#bing_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#bing_a").attr("href", "https://cn.bing.com/search?q=" + $("#myinput").val());
+        }
+      });
+      // 知乎
+      $("#zhihu_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#zhihu_a").attr("href", "https://www.zhihu.com/search?q=" + $("#myinput").val());
+        }
+      });
+      // 搜狗|微信
+      $("#sougouweixin_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#sougouweixin_a").attr("href", "https://weixin.sogou.com/weixin?type=2&query=" + $("#myinput").val());
+        }
+      });
+      // 神马
+      $("#shenma_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#shenma_a").attr("href", "https://m.sm.cn/s?q=" + $("#myinput").val());
+        }
+      });
+      // 神马
+      $("#toutiaosousuo_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#toutiaosousuo_a").attr("href", "https://so.toutiao.com/search?keyword=" + $("#myinput").val());
+        }
+      });
+      // 微博
+      $("#weibo_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#weibo_a").attr("href", "https://s.weibo.com/weibo/" + $("#myinput").val());
+        }
+      });
+      // 豆瓣
+      $("#douban_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          $("#douban_a").attr("href", "https://www.douban.com/search?q=" + $("#myinput").val());
+        }
+      });
+      // 回车键
+      $("#myinput").keydown(function (e) {
+        if (e.which == 13) {
+          $("#doge_button").trigger("mouseenter");
+          // $("#doge_a")[0].trigger("click");
+          document.getElementById("doge_a").click();
+        }
+      });
     });
-    // 获取背景图，放最后
-    $.ajax({
-      url: "https://api.no0a.cn/api/bing/0",
-      // url: "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1",必应官方接口，访问有问题
-      type: "get",
-      dataType: "json",
-      success: function (data) {
-        $("body").css({
-          "background": "url('" + data['bing']['url'] + "')",
-          "background-position": "center",
-          "background-size": "cover",
-          "background-position": "center",
-          "background-repeat": "no-repeat",
-          "background-origin": "content-box",
-          "background-clip": "content-box",
-        });
-        $("#copy_right_a").text(data['bing']['copyright']);
-        $("#copy_right_a").attr('href',data['bing']['url']);
-        // console.log(data);
-      },
-      error: function (XMLHttpRequest, textStatus, errorThrown) {
-        // alert(XMLHttpRequest.status);
-        // alert(XMLHttpRequest.readyState);
-        // alert(textStatus);
-      },
-    })
-
   </script>
 </body>
 
