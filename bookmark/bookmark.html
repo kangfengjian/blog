@@ -59,7 +59,7 @@
 </head>
 
 
-<body class="bg">
+<body class="bg" id="body">
   <div class="container-fluid pt-2">
     <div class="row align-items-center">
       <div class="col-lg-4 col-12 justify-content-center d-flex">
@@ -98,10 +98,6 @@
         </button>
         <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="douban_a" href="https://www.douban.com/">豆瓣</a>
-        </button>
-        <!-- 书签，保持在最后 -->
-        <button id="bookmark_button" type="button" class="btn btn-light btn-sm  m-1">
-          书签
         </button>
       </div>
       <div id="firstmenu" class="col-12 border border-success flex-wrap" style="opacity: 0;">
@@ -288,10 +284,6 @@
       // 当鼠标移入二级菜单时，显示一级菜单
       // 当鼠标移出二级菜单时，隐藏一级菜单，隐藏当前菜单
 
-      // 鼠标移到书签，显示一级菜单
-      $("#bookmark_button").click(function(){
-        $("#firstmenu").css("opacity",1);
-      });
       // 当鼠标移入一级菜单位置时显示一级菜单，
       $("#firstmenu").mouseenter(function(){
         $(this).css("opacity",1);
