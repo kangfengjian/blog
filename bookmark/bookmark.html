@@ -99,6 +99,92 @@
         <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="douban_a" href="https://www.douban.com/">豆瓣</a>
         </button>
+        <!-- 书签，保持在最后 -->
+        <button id="bookmark_button" type="button" class="btn btn-light btn-sm  m-1">
+          书签
+        </button>
+      </div>
+      <div id="firstmenu" class="col-12 border border-success flex-wrap" style="opacity: 0;">
+        <button id="secondmenu_button_qianduan" type="button" class="btn btn-light btn-sm  m-1">
+          前端
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
+        </button>
+      </div>
+      <div id="secondmenu_qianduan" class="col-12 border border-warning flex-wrap" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
+        </button>
       </div>
     </div>
   </div>
@@ -115,7 +201,6 @@
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
       isMobile = true;
     }
-
     $(document).ready(function () {
       // 国搜
       $("#guosou_button").mouseenter(function () {
@@ -169,7 +254,7 @@
           $("#shenma_a").attr("href", "https://m.sm.cn/s?q=" + $("#myinput").val());
         }
       });
-      // 神马
+      // 头条
       $("#toutiaosousuo_button").mouseenter(function () {
         if ($("#myinput").val() != '') {
           $("#toutiaosousuo_a").attr("href", "https://so.toutiao.com/search?keyword=" + $("#myinput").val());
@@ -194,6 +279,40 @@
           // $("#doge_a")[0].trigger("click");
           document.getElementById("doge_a").click();
         }
+      });
+      // 电脑上的操作逻辑：
+      // 不显示书签按钮
+      // 当鼠标移入一级菜单位置时显示一级菜单，
+      // 当鼠标移出一级菜单时一级菜单透明
+      // 当鼠标在一级菜单上的按钮上时，调出相应二级菜单，隐藏其他菜单
+      // 当鼠标移入二级菜单时，显示一级菜单
+      // 当鼠标移出二级菜单时，隐藏一级菜单，隐藏当前菜单
+
+      // 鼠标移到书签，显示一级菜单
+      $("#bookmark_button").click(function(){
+        $("#firstmenu").css("opacity",1);
+      });
+      // 当鼠标移入一级菜单位置时显示一级菜单，
+      $("#firstmenu").mouseenter(function(){
+        $(this).css("opacity",1);
+      });
+      // 鼠标离开一级菜单，隐藏一级菜单
+      $("#firstmenu").mouseleave(function(){
+        $(this).css("opacity",0);
+      });
+      // 鼠标在一级菜单里，显示相应二级菜单
+      $("#secondmenu_button_qianduan").hover(function(){
+        $("#secondmenu_qianduan").show();
+      });
+      
+      // 鼠标进入二级菜单，显示一级菜单
+      $("#secondmenu_qianduan").mouseenter(function(){
+        $("#firstmenu").css("opacity",1);
+      });      
+      // 鼠标离开二级菜单，显示一级菜单、隐藏二级菜单
+      $("#secondmenu_qianduan").mouseleave(function(){
+        $("#firstmenu").css("opacity",0);
+        $(this).hide();
       });
     });
   </script>
