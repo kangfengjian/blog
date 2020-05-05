@@ -99,7 +99,14 @@
         <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="douban_a" href="https://www.douban.com/">豆瓣</a>
         </button>
+        <button id="bilibili_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a id="bilibili_a" href="https://www.bilibili.com/">哔哩哔哩</a>
+        </button>
+        <button id="bookmark_button" type="button" class="btn btn-light btn-sm  m-1" style="display: none;">
+          书签
+        </button>
       </div>
+      <!-- 一级菜单 -->
       <div id="firstmenu" class="col-12 flex-wrap" style="opacity: 0;">
         <button id="secondmenu_button_qianduan" type="button" class="btn btn-light btn-sm  m-1">
           前端
@@ -107,7 +114,11 @@
         <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a href="http://202.194.15.160:8082/system/login.jsp">博达</a>
         </button>
+        <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
+          <a href="https://gitee.com/">码云</a>
+        </button>
       </div>
+      <!-- 二级菜单-前端 -->
       <div id="secondmenu_qianduan" class="col-12 flex-wrap" style="display: none;">
         <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a href="https://getbootstrap.net/docs/getting-started/introduction/">Bootstrap4</a>
@@ -117,7 +128,16 @@
   </div>
   <div class="download_pic">
     <a href="https://api.dujin.org/bing/1920.php" target="_blank">
-      <svg t="1588648704678" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3826" width="20" height="20"><path d="M46.535111 580.949333c12.344889 0 24.177778 4.892444 32.910222 13.568 8.732444 8.647111 13.653333 20.423111 13.653334 32.711111v201.159112c0 25.543111 20.821333 46.250667 46.535111 46.250666h744.732444c25.713778 0 46.535111-20.707556 46.535111-46.250666V627.2c0-16.497778 8.874667-31.772444 23.267556-40.049778 14.421333-8.248889 32.142222-8.248889 46.563555 0 14.392889 8.248889 23.267556 23.523556 23.267556 40.049778v201.187556C1024 905.016889 961.479111 967.111111 884.337778 967.111111H139.662222C62.492444 967.111111 0 905.016889 0 828.387556V627.2c0-25.543111 20.849778-46.250667 46.535111-46.250667z" fill="#000000" p-id="3827"></path><path d="M327.111111 102.855111A46.08 46.08 0 0 1 373.276444 56.888889h277.333334A46.08 46.08 0 0 1 696.888889 102.855111v266.325333h138.666667c19.2 0 36.408889 11.776 43.235555 29.639112a45.795556 45.795556 0 0 1-12.515555 50.716444L542.634667 734.862222a46.421333 46.421333 0 0 1-61.326223 0L157.781333 449.536a45.795556 45.795556 0 0 1-12.544-50.688 46.222222 46.222222 0 0 1 43.178667-29.667556h138.666667V102.855111z m92.444445 45.966222v266.325334a46.08 46.08 0 0 1-46.250667 45.966222h-63.089778l201.756445 177.92 201.756444-177.92h-63.089778a46.08 46.08 0 0 1-46.222222-45.966222V148.821333h-184.888889z" fill="#000000" p-id="3828"></path></svg>
+      <svg t="1588648704678" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        p-id="3826" width="20" height="20">
+        <path
+          d="M46.535111 580.949333c12.344889 0 24.177778 4.892444 32.910222 13.568 8.732444 8.647111 13.653333 20.423111 13.653334 32.711111v201.159112c0 25.543111 20.821333 46.250667 46.535111 46.250666h744.732444c25.713778 0 46.535111-20.707556 46.535111-46.250666V627.2c0-16.497778 8.874667-31.772444 23.267556-40.049778 14.421333-8.248889 32.142222-8.248889 46.563555 0 14.392889 8.248889 23.267556 23.523556 23.267556 40.049778v201.187556C1024 905.016889 961.479111 967.111111 884.337778 967.111111H139.662222C62.492444 967.111111 0 905.016889 0 828.387556V627.2c0-25.543111 20.849778-46.250667 46.535111-46.250667z"
+          fill="#000000" p-id="3827"></path>
+        <path
+          d="M327.111111 102.855111A46.08 46.08 0 0 1 373.276444 56.888889h277.333334A46.08 46.08 0 0 1 696.888889 102.855111v266.325333h138.666667c19.2 0 36.408889 11.776 43.235555 29.639112a45.795556 45.795556 0 0 1-12.515555 50.716444L542.634667 734.862222a46.421333 46.421333 0 0 1-61.326223 0L157.781333 449.536a45.795556 45.795556 0 0 1-12.544-50.688 46.222222 46.222222 0 0 1 43.178667-29.667556h138.666667V102.855111z m92.444445 45.966222v266.325334a46.08 46.08 0 0 1-46.250667 45.966222h-63.089778l201.756445 177.92 201.756444-177.92h-63.089778a46.08 46.08 0 0 1-46.222222-45.966222V148.821333h-184.888889z"
+          fill="#000000" p-id="3828">
+        </path>
+      </svg>
     </a>
   </div>
   <!-- <div id="copy_right" class="copyRight zindex-tooltip text-light">
@@ -134,6 +154,11 @@
       isMobile = true;
     }
     $(document).ready(function () {
+      // 显示书签按钮
+      if(isMobile){
+        $("#bookmark_button").show();
+        $("#firstmenu").hide();
+      }
       // 国搜
       $("#guosou_button").mouseenter(function () {
         if ($("#myinput").val() != '') {
@@ -177,7 +202,11 @@
       // 搜狗|微信
       $("#sougouweixin_button").mouseenter(function () {
         if ($("#myinput").val() != '') {
-          $("#sougouweixin_a").attr("href", "https://weixin.sogou.com/weixin?type=2&query=" + $("#myinput").val());
+          if (isMobile) {
+            $("#sougouweixin_a").attr("href", "https://weixin.sogou.com/weixinwap?type=2&query=" + $("#myinput").val());
+          } else {
+            $("#sougouweixin_a").attr("href", "https://weixin.sogou.com/weixin?type=2&query=" + $("#myinput").val());
+          }
         }
       });
       // 神马
@@ -204,6 +233,21 @@
           $("#douban_a").attr("href", "https://www.douban.com/search?q=" + $("#myinput").val());
         }
       });
+      // 哔哩哔哩
+      $("#bilibili_button").mouseenter(function () {
+        if ($("#myinput").val() != '') {
+          if (isMobile) {
+            $("#bilibili_a").attr("href", "https://m.bilibili.com/search?keyword=" + $("#myinput").val());
+          } else {
+            $("#bilibili_a").attr("href", "https://search.bilibili.com/all?keyword=" + $("#myinput").val());
+          }
+        }
+      });
+      // 书签按钮点击
+      $("#bookmark_button").click(function(){
+        $("#firstmenu").show();
+        $("#firstmenu").css("opacity", 1);
+      });
       // 回车键
       $("#myinput").keydown(function (e) {
         if (e.which == 13) {
@@ -221,25 +265,25 @@
       // 当鼠标移出二级菜单时，隐藏一级菜单，隐藏当前菜单
 
       // 当鼠标移入一级菜单位置时显示一级菜单，
-      $("#firstmenu").mouseenter(function(){
-        $(this).css("opacity",1);
+      $("#firstmenu").mouseenter(function () {
+        $(this).css("opacity", 1);
       });
       // 鼠标离开一级菜单，隐藏一级菜单
-      $("#firstmenu").mouseleave(function(){
-        $(this).css("opacity",0);
+      $("#firstmenu").mouseleave(function () {
+        $(this).css("opacity", 0);
       });
       // 鼠标在一级菜单里，显示相应二级菜单
-      $("#secondmenu_button_qianduan").hover(function(){
+      $("#secondmenu_button_qianduan").hover(function () {
         $("#secondmenu_qianduan").show();
       });
-      
+
       // 鼠标进入二级菜单，显示一级菜单
-      $("#secondmenu_qianduan").mouseenter(function(){
-        $("#firstmenu").css("opacity",1);
-      });      
+      $("#secondmenu_qianduan").mouseenter(function () {
+        $("#firstmenu").css("opacity", 1);
+      });
       // 鼠标离开二级菜单，显示一级菜单、隐藏二级菜单
-      $("#secondmenu_qianduan").mouseleave(function(){
-        $("#firstmenu").css("opacity",0);
+      $("#secondmenu_qianduan").mouseleave(function () {
+        $("#firstmenu").css("opacity", 0);
         $(this).hide();
       });
     });
