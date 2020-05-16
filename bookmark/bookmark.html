@@ -35,7 +35,7 @@
 
     /* 正在被点击的链接 */
     .bg {
-      background: url("https://api.dujin.org/bing/1920.php");
+      background: url("");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -140,6 +140,7 @@
       </svg>
     </a>
   </div>
+  <div id="test" style="background-color: white;"></div>
   <!-- <div id="copy_right" class="copyRight zindex-tooltip text-light">
     <a id="copy_right_a" href="" style="cursor:default;"></a>
   </div> -->
@@ -155,7 +156,7 @@
     }
     $(document).ready(function () {
       // 显示书签按钮
-      if(isMobile){
+      if (isMobile) {
         $("#bookmark_button").show();
         $("#firstmenu").hide();
       }
@@ -244,7 +245,7 @@
         }
       });
       // 书签按钮点击
-      $("#bookmark_button").click(function(){
+      $("#bookmark_button").click(function () {
         $("#firstmenu").show();
         $("#firstmenu").css("opacity", 1);
       });
@@ -286,7 +287,16 @@
         $("#firstmenu").css("opacity", 0);
         $(this).hide();
       });
+      // 显示背景图片
+      $("body").css("background", "url('https://api.dujin.org/bing/1920.php')");
+      $("body").css("background-size", "cover");
+      $("body").css("background-position", "center");
+      $("body").css("background-repeat", "no-repeat");
+      $("body").css("background-origin", "content-box");
+      $("body").css("background-clip", "content-box");
+      $("#test").text(navigator.userAgent);
     });
+
   </script>
 </body>
 
