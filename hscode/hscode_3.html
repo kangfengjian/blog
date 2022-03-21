@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>海关编码预测系统</title>
+  <!-- 引入bootstrap的css文件 -->
+  <link rel="stylesheet" href="css\bootstrap-4.4.1-dist\css\bootstrap.min.css">
+  <!-- 引入字体文件 -->
+  <link rel="stylesheet" href="css/iconfont1.css">
+  <link rel="stylesheet" href="css/iconfont2.css">
+  <!-- 引入自定义css文件 -->
+  <script>document.write('<link rel="stylesheet" href="css/main.css?time=' + new Date().getTime() + '">');</script>
+  <link rel="shortcut icon" href="favicon.png">
+
+</head>
+
+<body class="no-margin-h">
+  <div class="container-fluid fill-h no-margin-h">
+    <!-- 标题栏 -->
+    <div class="row h-10">
+      <div class="col-lg-3 fill-h no-margin-h no-padding"></div>
+      <div class="col-lg-6 fill-h no-margin-h no-padding">
+        <div class="container-fluid h-100  d-flex justify-content-center align-items-center">
+          <h1>海关编码预测系统</h1>
+        </div>
+      </div>
+      <div class="col-lg-3 fill-h no-margin-h no-padding"></div>
+    </div>
+    <!-- 搜索框 -->
+    <div class="row h-5">
+      <div class="col-lg-3 fill-h no-margin-h no-padding"></div>
+      <div class="col-lg-6 fill-h no-margin-h no-padding">
+        <div class="container-fluid h-100">
+          <!-- 搜索框 -->
+          <div class="row h-50 px-2 d-flex justify-content-center align-items-center" id="search_div"
+            style="display:none !important;">
+            <div class="input-group mb-0">
+              <input type="text" class="form-control" placeholder="请输入商品文本描述" aria-label="Recipient's username"
+                aria-describedby="basic-addon2" id="search_input">
+              <div class="input-group-append" id="search_button" style="cursor:pointer;">
+                <span class="iconfont icon-htmal5icon25 input-group-text rounded-right"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 fill-h no-margin-h no-padding"></div>
+    </div>
+    <!-- 内容行 -->
+    <div class="row h-80">
+      <!-- 预测结果列 -->
+      <div class="col-lg-8 fill-h no-margin-h">
+        <div class="container-fluid h-100 p-3">
+          <!-- 标题行 -->
+          <div
+            class="row h-5 border-info border border-bottom-0 rounded-top d-flex bg-info justify-content-left align-items-center pl-3"
+            id='categories_div'>
+            <div id="category1" class="col-12 h-100 px-2 py-2" style="cursor:default;">
+              <h5>预测结果展示</h5>
+            </div>
+          </div>
+          <div class="row h-5">
+            <div id="category1" class="col-12 h-100 px-2 py-2 border border-bottom-0 border-top-0 border-info"
+              style="cursor:default;">
+              <h5>为您展示预测结果的 Top5：</h5>
+            </div>
+          </div>
+          <!-- 结果行 -->
+          <div class="row border-top-0 border border-info rounded-bottom fs8 d-flex justify-content-center p-2"
+            id='categor_score'>
+            <div class="col-12">
+              <div class="container-fluid h-100 no-padding">
+                <!-- 案例1 -->
+                <div class="row border border-primary rounded">
+                  <div class="col-12">
+                    <div class="container-fluid h-100 no-padding">
+                      <div class="row py-1">
+                        <div class="col-lg-6">预测编码：61046100</div>
+                        <div class="col-lg-6 d-flex justify-content-end">置信度：10.77%</div>
+                      </div>
+                      <div class="row py-1 border-top border-primary">
+                        <div class="col-lg-10">
+                          <div class="container-fluid no-padding">
+                            <div class="row">
+                              <div class="col-12">
+                                归类过程：
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                >纺织原料及纺织制品
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-1">
+                              </div>
+                              <div class="col-11">
+                                >针织或钩编的服装及衣着附件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2">
+                              </div>
+                              <div class="col-10 text-wrap">
+                                >针织或钩编的女式西服套装、便服套装、上衣、连衣裙、裙子、裙裤、长裤、护胸背带工装裤、马裤及短裤(游泳服除外)
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-3">
+                              </div>
+                              <div class="col-9 text-wrap">
+                                >长裤、护胸背带工装裤、马裤及短裤
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-4">
+                              </div>
+                              <div class="col-8 text-wrap">
+                                >羊毛或动物细毛制
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end align-items-end">
+                          <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample" role="button"
+                            aria-expanded="true" aria-controls="collapseExample">
+                            案例
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row border border-primary rounded collapse border-top-0 pl-3 py-1" id="collapseExample">
+                  同类案例：<br>
+                  1. 女背带裤<br>
+                  2. 毛制针织或钩编女护胸背带工装裤<br>
+                  3. 女童羊毛制针织连体长裤<br>
+                  4. 毛质针织女裤<br>
+                  5. 羊毛制针织女长裤<br>
+                  6. 毛制女式针织长裤<br>
+                  7. 羊毛针织长裤<br>
+                  8. 裤子<br>
+                  9. 女羊毛裤
+                </div>
+                <!-- 案例2 -->
+                <div class="row border border-primary rounded mt-3">
+                  <div class="col-12">
+                    <div class="container-fluid h-100 no-padding">
+                      <div class="row py-1">
+                        <div class="col-lg-6">预测编码：84462900</div>
+                        <div class="col-lg-6 d-flex justify-content-end">置信度：3.88%</div>
+                      </div>
+                      <div class="row py-1 border-top border-primary">
+                        <div class="col-lg-10">
+                          <div class="container-fluid no-padding">
+                            <div class="row">
+                              <div class="col-12">
+                                归类过程：
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                >机器、机械器具、电气设备及其零件；录音机及放声机、电视图像、声音的录制和重放设备及其零件、附件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-1">
+                              </div>
+                              <div class="col-11">
+                                >核反应堆、锅炉、机器、机械器具及其零件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2">
+                              </div>
+                              <div class="col-10 text-wrap">
+                                >织机
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-3">
+                              </div>
+                              <div class="col-9 text-wrap">
+                                >所织织物宽度超过30厘米的梭织机
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-4">
+                              </div>
+                              <div class="col-8 text-wrap">
+                                >其他
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end align-items-end">
+                          <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample2"
+                            role="button" aria-expanded="true" aria-controls="collapseExample2">
+                            案例
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row border border-primary rounded collapse border-top-0 pl-3 py-1" id="collapseExample2">
+                  同类案例：<br>
+                  1. 织机<br>
+                  2. 织物宽>30cm的梭织非动力织机<br>
+                  3. 织物宽>30cm的梭织非动力织机<br>
+                  4. 织物宽>30cm的梭织非动力织机<br>
+                  5. 织物宽>30cm的梭织非动力织机<br>
+                  6. 60cm织布机/手织机<br>
+                  7. 40cm织布机/手织机<br>
+                </div>
+
+                <!-- 案例3 -->
+                <div class="row border border-primary rounded mt-3">
+                  <div class="col-12">
+                    <div class="container-fluid h-100 no-padding">
+                      <div class="row py-1">
+                        <div class="col-lg-6">预测编码：84462110</div>
+                        <div class="col-lg-6 d-flex justify-content-end">置信度：0.023%</div>
+                      </div>
+                      <div class="row py-1 border-top border-primary">
+                        <div class="col-lg-10">
+                          <div class="container-fluid no-padding">
+                            <div class="row">
+                              <div class="col-12">
+                                归类过程：
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                >机器、机械器具、电气设备及其零件；录音机及放声机、电视图像、声音的录制和重放设备及其零件、附件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-1">
+                              </div>
+                              <div class="col-11">
+                                >核反应堆、锅炉、机器、机械器具及其零件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2">
+                              </div>
+                              <div class="col-10 text-wrap">
+                                >织机
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-3">
+                              </div>
+                              <div class="col-9 text-wrap">
+                                >所织织物宽度超过30厘米的梭织机
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-4">
+                              </div>
+                              <div class="col-8 text-wrap">
+                                >动力织机
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end align-items-end">
+                          <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample3"
+                            role="button" aria-expanded="true" aria-controls="collapseExample3">
+                            案例
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row border border-primary rounded collapse border-top-0 pl-3 py-1" id="collapseExample3">
+                  同类案例：<br>
+                  1. 梭织动力地毯织机<br>
+                  2. 织物宽＞30cm的梭织动力地毯织机<br>
+                  3. 织物宽＞30cm的梭织动力地毯织机<br>
+                  4. 织物宽＞30cm的梭织动力地毯织机<br>
+                  5. 织物宽＞30cm的梭织动力地毯织机<br>
+                </div>
+
+                <!-- 案例4 -->
+                <div class="row border border-primary rounded mt-3">
+                  <div class="col-12">
+                    <div class="container-fluid h-100 no-padding">
+                      <div class="row py-1">
+                        <div class="col-lg-6">预测编码：84148049</div>
+                        <div class="col-lg-6 d-flex justify-content-end">置信度：0.020%</div>
+                      </div>
+                      <div class="row py-1 border-top border-primary">
+                        <div class="col-lg-10">
+                          <div class="container-fluid no-padding">
+                            <div class="row">
+                              <div class="col-12">
+                                归类过程：
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                >机器、机械器具、电气设备及其零件；录音机及放声机、电视图像、声音的录制和重放设备及其零件、附件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-1">
+                              </div>
+                              <div class="col-11">
+                                >核反应堆、锅炉、机器、机械器具及其零件
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2">
+                              </div>
+                              <div class="col-10 text-wrap">
+                                >空气泵或真空泵、空气及其他气体压缩机、风机、风扇；装有风扇的通风罩或循环气罩，不论是否装有过滤器
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-3">
+                              </div>
+                              <div class="col-9 text-wrap">
+                                >其他
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-4">
+                              </div>
+                              <div class="col-8 text-wrap">
+                                >空气及其他气体压缩机
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end align-items-end">
+                          <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample4"
+                            role="button" aria-expanded="true" aria-controls="collapseExample4">
+                            案例
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row border border-primary rounded collapse border-top-0 pl-3 py-1" id="collapseExample4">
+                  同类案例：<br>
+                  1.
+                  机器、机械器具、电气设备及其零件；录音机及放声机、电视图像、声音的录制和重放设备及其零件、附件|核反应堆、锅炉、机器、机械器具及其零件|空气泵或真空泵、空气及其他气体压缩机、风机、风扇；装有风扇的通风罩或循环气罩，不论是否装有过滤器|其他|空气及其他气体压缩机|其他<br>
+                </div>
+                <!-- 案例5 -->
+                <div class="row border border-primary rounded mt-3">
+                  <div class="col-12">
+                    <div class="container-fluid h-100 no-padding">
+                      <div class="row py-1">
+                        <div class="col-lg-6">预测编码：72103000</div>
+                        <div class="col-lg-6 d-flex justify-content-end">置信度：0.019%</div>
+                      </div>
+                      <div class="row py-1 border-top border-primary">
+                        <div class="col-lg-10">
+                          <div class="container-fluid no-padding">
+                            <div class="row">
+                              <div class="col-12">
+                                归类过程：
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                >贱金属及其制品
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-1">
+                              </div>
+                              <div class="col-11">
+                                >钢铁
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2">
+                              </div>
+                              <div class="col-10 text-wrap">
+                                >宽度在
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-3">
+                              </div>
+                              <div class="col-9 text-wrap">
+                                >电镀锌的
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-end align-items-end">
+                          <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample5"
+                            role="button" aria-expanded="true" aria-controls="collapseExample5">
+                            案例
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row border border-primary rounded collapse border-top-0 pl-3 py-1" id="collapseExample5">
+                  同类案例：<br>
+                  1. 电镀锌钢板<br>
+                  2. 电镀锌铁板<br>
+                  3. 镀锌钢板<br>
+                  4. 电镀锌卷板<br>
+                  5. 热轧非合金电镀锌钢板/SGCC-Z27
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 主动交互列 -->
+      <div class="col-lg-4 fill-h no-margin-h">
+        <div class="container-fluid h-100 p-3">
+          <!-- 标题行 -->
+          <div
+            class="row h-5 border-info border border-bottom-0 rounded-top d-flex bg-info justify-content-left align-items-center pl-3"
+            id='categories_div'>
+            <div id="category1" class="col-12 h-100 px-2 py-2" style="cursor:default;">
+              <h5>候选关键词</h5>
+            </div>
+          </div>
+          <div class="row h-10">
+            <div id="category1" class="col-12 h-100 px-2 py-2 border border-bottom-0 border-top-0 border-info"
+              style="cursor:default;">
+              <h5>结果置信度较低，请选择关键词完善信息：</h5>
+            </div>
+          </div>
+          <!-- 结果行 -->
+          <div class="row border-top-0 border border-info rounded-bottom fs8 d-flex justify-content-center p-2"
+            id='categor_score'>
+            <div class="col-12">
+              <div class="container-fluid  no-padding">
+                <!-- 案例1 -->
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    男式
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    女式
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    休闲裤
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    西裤
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                  <label class="form-check-label" for="defaultCheck1">
+                    短裤
+                  </label>
+                </div>
+              </div>
+              <div class="container-fluid no-padding mt-3">
+                <div class="row d-flex justify-content-center">
+                  <button type="button" class="btn btn-primary btn-sm">提交</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- 引入jQuery文件 -->
+  <script src="js/jquery.min.js"></script>
+  <!-- 引入bootstrap的js文件 -->
+  <script src="css\bootstrap-4.4.1-dist\js\popper.min.js"></script>
+  <script src="css\bootstrap-4.4.1-dist\js\bootstrap.min.js"></script>
+
+  <!-- 引入echarts文件///////////////////////////////////////////////////////////////////////////////////////// -->
+  <script type="text/javascript" src="js/echarts.min.js"></script>
+  <!-- 引入自定义js文件 -->
+  <script src='data/data_person.js'></script>
+  <script src='data/data_part.js'></script>
+  <script src='data/data_item.js'></script>
+  <script>document.write('<script src="js/personal.js?time=' + new Date().getTime() + '"><\/script>');</script>
+
+
+  <script>
+
+  </script>
+
+</body>
+
+</html>
