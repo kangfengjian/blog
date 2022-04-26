@@ -69,9 +69,6 @@
         <button id="google_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="google_a" href="https://www.google.com.hk/">谷歌</a>
         </button>
-        <button id="doge_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="doge_a" href="https://www.dogedoge.com/">多吉</a>
-        </button>
         <button id="zhihu_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="zhihu_a" href="https://www.zhihu.com/">知乎</a>
         </button>
@@ -81,14 +78,8 @@
         <button id="sougouweixin_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="sougouweixin_a" href="https://weixin.sogou.com/">搜狗|微信</a>
         </button>
-        <button id="shenma_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="shenma_a" href="https://m.sm.cn/">神马</a>
-        </button>
         <button id="toutiaosousuo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="toutiaosousuo_a" href="https://so.toutiao.com/">头条搜索</a>
-        </button>
-        <button id="weibo_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a id="weibo_a" href="https://weibo.com/">微博</a>
         </button>
         <button id="douban_button" type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a id="douban_a" href="https://www.douban.com/">豆瓣</a>
@@ -106,7 +97,7 @@
       <!-- 置顶书签 -->
       <div id="firstmenu" class="col-12 flex-wrap mb-2">
         <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
-          <a href="https://kangfengjian.gitee.io/">首页</a>
+          <a href="https://kangfengjian.github.io/">首页</a>
         </button>
         <button type="button" class="btn btn-secondary btn-sm  m-1" style="cursor: default;">
           <a href="https://github.com/">GitHub</a>
@@ -547,7 +538,7 @@
       // 头条
       $("#toutiaosousuo_button").mouseenter(function () {
         if ($("#myinput").val() != '') {
-          $("#toutiaosousuo_a").attr("href", "https://so.toutiao.com/search?keyword=" + $("#myinput").val());
+          $("#toutiaosousuo_a").attr("href", "https://so.toutiao.com/search/?dvpf=pc&dvpf=pc&keyword=" + $("#myinput").val());
         }
       });
       // 微博
