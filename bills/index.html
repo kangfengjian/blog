@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>友钱</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="moneyBag.ico" type="image/x-icon">
+    <!-- 注意：Bootstrap 5 不再需要 Popper.js，因为它已经内置在 Bootstrap 的 JS 中了 -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- 引入 jQuery -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">基本活动记录</h1>
+        <div id="tableContainer" class="table-responsive"></div>
+    </div>
+    <script>
+        function fetchData(urls) {
+            // 获取多个文件里的所有内容// 使用map来转换URL数组为Promise数组  
+            const promises = urls.map(url => $.ajax({
+                url: url,
+                dataType: 'text'
+            }));
+            // 使用Promise.all来等待所有请求完成  
+            return Promise.all(promises).then(responses => {
+                // responses是一个数组，包含了每个AJAX请求返回的数据   你可以在这里处理这些数据  
+                return responses.map(response => {
+                    // 对每个响应进行处理，比如分割成行和单元格  // const lines = response.split('\n');  // ...（进一步处理数据的代码）  // 返回处理后的数据（这里只是一个示例，实际返回什么取决于你的需求）  
+                    return response;/* 处理后的数据 */;
+                });
+            }).catch(error => {
+                // 处理任何请求失败的情况  
+                console.error('Error fetching data:', error);
+                throw error; // 重新抛出错误，以便在调用该函数的地方可以捕获它  
+            });
+        }
+        function csv_2_table(data) {
+            // const lines = data.split('\n');
+            // const table = $('<table>').addClass('table table-striped');
+            // const headerRow = $('<thead>').append($('<tr>'));
+            // lines.forEach((line, index) => {
+            //     const cells = line.split(',');
+            //     const row = index === 0 ? headerRow.find('tr') : $('<tr>');
+            //     cells.forEach(cell => {
+            //         const cellElement = index === 0 ? $('<th>') : $('<td>');
+            //         cellElement.text(cell.trim());
+            //         row.append(cellElement);
+            //     });
+            //     if (index === 0) {
+            //         headerRow.appendTo(table);
+            //     } else {
+            //         row.appendTo(table);
+            //     }
+            // });
+            const theads = data.split('\n')[0].split(',');
+            let table = `<table class="table table-striped table-sm table-bordered">`;
+            table = table + `<thead><tr>`;
+            for (let i = 0; i < theads.length; i++) {
+                table = table + '<td>' + theads[i] + '</td>';
+            }
+            table = table + '<tbody>';
+            for (let i = 1; i < data.split('\n').length; i++) {
+                if(data.split('\n')[i].length===0){
+                    continue;
+                }
+                table = table + '<tr>';
+                for (let j = 0; j < data.split('\n')[i].split(',').length; j++) {
+
+                    let = s_temp = ''
+                    if(j===1 || j===0){
+                        s_temp = s_temp + data.split('\n')[i].split(',')[j].substring(0,5)+'...';
+                    }
+                    else{
+                        s_temp = s_temp+data.split('\n')[i].split(',')[j];
+                    }
+                    table = table + '<td>' + s_temp + '</td>';
+                }
+                table = table + '</tr>';
+            }
+            table = table + '</tbody>';
+            table = table + `</tr></thead>`;
+            table = table + `</table>`;
+            return table;
+        }
+        $(document).ready(function () {
+            // 使用该函数  
+            const urls = ['bills.csv', 'account.csv', 'subject.csv'];
+            fetchData(urls).then(processedData => {
+                document.getElementById('tableContainer').innerHTML = csv_2_table(processedData[0]);
+            }).catch(error => {
+                // 处理在获取数据过程中发生的错误  
+            });
+
+        });  
+    </script>
+</body>
+
+</html>
