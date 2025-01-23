@@ -14,7 +14,7 @@
     <div class="container text-center">
       <!-- 搜索按钮框 -->
       <div class="row align-middle">
-        <div class="col-2 order-1  col-md-1 order-md-1 border1 d-flex justify-content-center align-items-center mb-2">
+        <div class="col-2 order-0 col-md-1 order-md-0 border1 d-flex justify-content-center align-items-center mb-2">
           <div class="dropdown">
             <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -36,12 +36,12 @@
             </ul>
           </div>
         </div>
-        <div class="col-6 order-3 col-md-3 order-md-2  border1 justify-content-end align-items-center d-flex  mb-2">
+        <div class="col-6 order-4 col-md-3 order-md-1  border1 justify-content-center justify-content-md-end align-items-center d-flex  mb-2">
           <button type="button" class="btn btn-primary btn-sm me-1" id="left20">←20</button>
           <button type="button" class="btn btn-primary btn-sm me-1" id="left05">←5</button>
           <button type="button" class="btn btn-primary btn-sm" id="left01">←1</button>
         </div>
-        <div class="col-10 order-2 col-md-4 order-md-3 border1 d-flex justify-content-center align-items-center mb-2">
+        <div class="col-10 order-1 col-md-4 order-md-2 border1 d-flex justify-content-center align-items-center mb-2">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="输入正文页码(1-1760)搜索" aria-label="Recipient's username"
               aria-describedby="button-addon2" id="imageSearch">
@@ -54,22 +54,21 @@
             </button>
           </div>
         </div>
-        <div class="col-6 order-4 col-md-3 order-md-4  border1 d-flex justify-content-start align-items-center  mb-2">
+        <div class="col-6 order-5 col-md-3 order-md-3 border1 justify-content-center justify-content-md-start align-items-center d-flex mb-2">
           <button type="button" class="btn btn-primary btn-sm me-1" id="right01">1→</button>
           <button type="button" class="btn btn-primary btn-sm me-1" id="right05">5→</button>
           <button type="button" class="btn btn-primary btn-sm" id="right20">20→</button>
         </div>
-        <div class="col-0 order-5 col-md-1 order-md-5 border1"></div>
-      </div>
-      <!-- 图片框 -->
-      <div class="row border1">
-        <div class="col">
+        <!-- 占位格 -->
+        <div class="col-0 order-2 col-md-1 order-md-4 border1 d-flex justify-content-center align-items-center mb-2"></div>
+        <!-- 图片框 -->
+        <div class="col-12 order-3 col-md-12 order-md-5 mb-2">
           <img id="displayedImage" src="images/0000.jpg" class="img-fluid" alt="">
         </div>
       </div>
       <!-- 声明框 -->
       <div class="row border1">
-        <div class="col small">本页面仅用于学习参考，更优体验请使用<a class="text-decoration-none link-info"
+        <div class="col small">本页面仅用于学习参考<br>更优体验请使用<a class="text-decoration-none link-info"
             href="https://a.app.qq.com/o/simple.jsp?pkgname=cn.dictcn.android.digitize.swg_xdhycd_21004">现代汉语词典APP</a>
         </div>
       </div>
@@ -91,13 +90,13 @@
     document.getElementById('imageSearch').addEventListener('keydown', function () {
       if (event.key === 'Enter') {
         current_image = parseInt(document.getElementById('imageSearch').value);
-        showimage(current_image+91);
+        showimage(current_image + 91);
       }
     });
     //点击搜索按钮
     document.getElementById('searchButton').addEventListener('click', function () {
       current_image = parseInt(document.getElementById('imageSearch').value);
-      showimage(current_image+91);
+      showimage(current_image + 91);
     });
     // 右1
     document.getElementById('right01').addEventListener('click', function () {
@@ -131,51 +130,51 @@
     });
     // 目录
     document.getElementById('catalogue0000').addEventListener('click', function () {
-      current_image=0;
+      current_image = 0;
       showimage(current_image);
     });
     document.getElementById('catalogue0019').addEventListener('click', function () {
-      current_image=19;
+      current_image = 19;
       showimage(current_image);
     });
     document.getElementById('catalogue0023').addEventListener('click', function () {
-      current_image=23;
+      current_image = 23;
       showimage(current_image);
     });
     document.getElementById('catalogue0029').addEventListener('click', function () {
-      current_image=29;
+      current_image = 29;
       showimage(current_image);
     });
     document.getElementById('catalogue0030').addEventListener('click', function () {
-      current_image=30;
+      current_image = 30;
       showimage(current_image);
     });
     document.getElementById('catalogue0090').addEventListener('click', function () {
-      current_image=90;
+      current_image = 90;
       showimage(current_image);
     });
     document.getElementById('catalogue1860').addEventListener('click', function () {
-      current_image=1860;
+      current_image = 1860;
       showimage(current_image);
     });
     document.getElementById('catalogue1877').addEventListener('click', function () {
-      current_image=1877;
+      current_image = 1877;
       showimage(current_image);
     });
     document.getElementById('catalogue1885').addEventListener('click', function () {
-      current_image=1885;
+      current_image = 1885;
       showimage(current_image);
     });
     document.getElementById('catalogue1888').addEventListener('click', function () {
-      current_image=1888;
+      current_image = 1888;
       showimage(current_image);
     });
     document.getElementById('catalogue1891').addEventListener('click', function () {
-      current_image=1891;
+      current_image = 1891;
       showimage(current_image);
     });
     document.getElementById('catalogue1893').addEventListener('click', function () {
-      current_image=1893;
+      current_image = 1893;
       showimage(current_image);
     });
   </script>
