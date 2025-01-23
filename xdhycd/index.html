@@ -1,66 +1,184 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>柯林斯COBUILD高阶英汉双解学习词典(第8版)</title>
-    <!-- 引入Bootstrap 5的CSS -->
-    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <!-- 引入Bootstrap 5的JS和依赖 -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script> -->
-    <style>
-        .image-display {
-            text-align: center;
-            padding: 20px;
-        }
-        .image-display img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>现代汉语词典</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
+
 <body>
-    <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-12 col-md-6 offset-md-3 mt-5 mb-auto">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="输入图片名称" id="imageSearch" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button class="btn btn-primary" type="button" id="searchButton">搜索</button>
-                </div>
-            </div>
-            <div class="col-12 image-display">
-                <img id="displayedImage" src=" ../files/dictionaries/现代汉语词典第七版/现代汉语词典第七版_00.png" alt="图片展示区域" >
-            </div>
+  <div class="container text-center mt-3">
+    <div class="container text-center">
+      <!-- 搜索按钮框 -->
+      <div class="row align-middle">
+        <div class="col-2 order-1  col-md-1 order-md-1 border1 d-flex justify-content-center align-items-center mb-2">
+          <div class="dropdown">
+            <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              目录
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" id='catalogue0000'>封面</a></li>
+              <li><a class="dropdown-item" id='catalogue0019'>凡例</a></li>
+              <li><a class="dropdown-item" id='catalogue0023'>音节表</a></li>
+              <li><a class="dropdown-item" id='catalogue0029'>新旧字形对照表</a></li>
+              <li><a class="dropdown-item" id='catalogue0030'>部首检字表</a></li>
+              <li><a class="dropdown-item" id='catalogue0090'>词典正文</a></li>
+              <li><a class="dropdown-item" id='catalogue1860'>我国历代纪元表</a></li>
+              <li><a class="dropdown-item" id='catalogue1877'>计量单位表</a></li>
+              <li><a class="dropdown-item" id='catalogue1885'>汉字偏旁名称表</a></li>
+              <li><a class="dropdown-item" id='catalogue1888'>汉语拼音方案</a></li>
+              <li><a class="dropdown-item" id='catalogue1891'>元素周期表</a></li>
+              <li><a class="dropdown-item" id='catalogue1893'>中国地图</a></li>
+            </ul>
+          </div>
         </div>
+        <div class="col-6 order-3 col-md-3 order-md-2  border1 justify-content-end align-items-center d-flex  mb-2">
+          <button type="button" class="btn btn-primary btn-sm me-1" id="left20">←20</button>
+          <button type="button" class="btn btn-primary btn-sm me-1" id="left05">←5</button>
+          <button type="button" class="btn btn-primary btn-sm" id="left01">←1</button>
+        </div>
+        <div class="col-10 order-2 col-md-4 order-md-3 border1 d-flex justify-content-center align-items-center mb-2">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="输入正文页码(1-1760)搜索" aria-label="Recipient's username"
+              aria-describedby="button-addon2" id="imageSearch">
+            <button class="input-group-text bg-body button" id="searchButton">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="col-6 order-4 col-md-3 order-md-4  border1 d-flex justify-content-start align-items-center  mb-2">
+          <button type="button" class="btn btn-primary btn-sm me-1" id="right01">1→</button>
+          <button type="button" class="btn btn-primary btn-sm me-1" id="right05">5→</button>
+          <button type="button" class="btn btn-primary btn-sm" id="right20">20→</button>
+        </div>
+        <div class="col-0 order-5 col-md-1 order-md-5 border1"></div>
+      </div>
+      <!-- 图片框 -->
+      <div class="row border1">
+        <div class="col">
+          <img id="displayedImage" src="images/0000.jpg" class="img-fluid" alt="">
+        </div>
+      </div>
+      <!-- 声明框 -->
+      <div class="row border1">
+        <div class="col">本页面仅用于学习参考，更优体验请使用<a class="text-decoration-none link-info"
+            href="https://a.app.qq.com/o/simple.jsp?pkgname=cn.dictcn.android.digitize.swg_xdhycd_21004">现代汉语词典APP</a>
+        </div>
+      </div>
     </div>
-
-    <script>
-        document.getElementById('searchButton').addEventListener('click', function() {
-            const imageName = document.getElementById('imageSearch').value;
-            const imageElement = document.getElementById('displayedImage');
-
-            // 假设图片文件存放在与当前HTML文件同一目录下的images文件夹中
-            // const imagePath = `images/.jpg`; // 根据实际情况调整文件后缀和路径
-            const imagePath = `../files/dictionaries/现代汉语词典第七版/现代汉语词典第七版_${imageName}.png`; // 根据实际情况调整文件后缀和路径
-            
-
-            // 创建一个Image对象，用于预加载图片
-            const img = new Image();
-            img.src = imagePath;
-            img.onload = function() {
-                // 图片加载成功
-                imageElement.src = imagePath;
-                imageElement.style.display = 'block';
-            }
-            img.onerror = function() {
-                // 图片加载失败
-                alert('未找到图片，请检查名称是否正确。');
-                imageElement.style.display = 'none';
-            }
-        });
-    </script>
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script>
+    let current_image = 0;  //定义图片序号
+    // 图片展示函数
+    function showimage(current_image) {
+      const image_path = `images/${current_image.toString().padStart(4, '0')}.jpg`;
+      const image = document.getElementById('displayedImage');
+      image.setAttribute('src', image_path);
+    }
+    //输入框回车事件
+    document.getElementById('imageSearch').addEventListener('keydown', function () {
+      if (event.key === 'Enter') {
+        current_image = parseInt(document.getElementById('imageSearch').value);
+        showimage(current_image+91);
+      }
+    });
+    //点击搜索按钮
+    document.getElementById('searchButton').addEventListener('click', function () {
+      current_image = parseInt(document.getElementById('imageSearch').value);
+      showimage(current_image+91);
+    });
+    // 右1
+    document.getElementById('right01').addEventListener('click', function () {
+      current_image = current_image + 1;
+      showimage(current_image);
+    });
+    // 右5
+    document.getElementById('right05').addEventListener('click', function () {
+      current_image = current_image + 5;
+      showimage(current_image);
+    });
+    // 右20
+    document.getElementById('right20').addEventListener('click', function () {
+      current_image = current_image + 20;
+      showimage(current_image);
+    });
+    // 左1
+    document.getElementById('left01').addEventListener('click', function () {
+      current_image = current_image - 1;
+      showimage(current_image);
+    });
+    // 左5
+    document.getElementById('left05').addEventListener('click', function () {
+      current_image = current_image - 5;
+      showimage(current_image);
+    });
+    // 右20
+    document.getElementById('left20').addEventListener('click', function () {
+      current_image = current_image - 20;
+      showimage(current_image);
+    });
+    // 目录
+    document.getElementById('catalogue0000').addEventListener('click', function () {
+      current_image=0;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue0019').addEventListener('click', function () {
+      current_image=19;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue0023').addEventListener('click', function () {
+      current_image=23;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue0029').addEventListener('click', function () {
+      current_image=29;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue0030').addEventListener('click', function () {
+      current_image=30;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue0090').addEventListener('click', function () {
+      current_image=90;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1860').addEventListener('click', function () {
+      current_image=1860;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1877').addEventListener('click', function () {
+      current_image=1877;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1885').addEventListener('click', function () {
+      current_image=1885;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1888').addEventListener('click', function () {
+      current_image=1888;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1891').addEventListener('click', function () {
+      current_image=1891;
+      showimage(current_image);
+    });
+    document.getElementById('catalogue1893').addEventListener('click', function () {
+      current_image=1893;
+      showimage(current_image);
+    });
+  </script>
 </body>
+
 </html>
