@@ -89,14 +89,14 @@
     //输入框回车事件
     document.getElementById('imageSearch').addEventListener('keydown', function () {
       if (event.key === 'Enter') {
-        current_image = parseInt(document.getElementById('imageSearch').value);
-        showimage(current_image + 91);
+        current_image = parseInt(document.getElementById('imageSearch').value)+91;
+        showimage(current_image);
       }
     });
     //点击搜索按钮
     document.getElementById('searchButton').addEventListener('click', function () {
-      current_image = parseInt(document.getElementById('imageSearch').value);
-      showimage(current_image + 91);
+      current_image = parseInt(document.getElementById('imageSearch').value)+91;
+      showimage(current_image);
     });
     // 右1
     document.getElementById('right01').addEventListener('click', function () {
